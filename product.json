@@ -1,0 +1,28 @@
+{
+    "name": "6 Micro NFC Tags 15.6mm X 6mm - 144 Bytes NTAG213, Compatible with all NFC-capable phones",
+    "price": "$13.99",
+    "img-url": "https://images-na.ssl-images-amazon.com/images/I/41RWtHZK9oL._SX300_QL70_.jpg",
+    "star-rating": "5.0 out of 5 stars",
+    "customer-reviews-count": "5 customer reviews",
+    "details": [
+        "Tiny Micro NFC NTag213 only 15.6mm X 6mm",
+        "144 bytes or rewrite-able and optionally password protected or permanently lockable storage",
+        "Somewhat flexible",
+        "Great for embedding into 3D Printed Projects",
+        "Works with all NFC enables Phones"
+    ],
+    "short-reviews": [
+        "Good price.",
+        "I purchased this item to place in my own bent ...",
+        "AAA+++",
+        "Doesn't work for my project, but great tags nonetheless",
+        "Worked great in NFC ring"
+    ],
+    "long-reviews": [
+        "I am using one of these, glued inside of my ring, to open a Samsung Ezon deadbolt style door lock. Works great!A similar item on adafruit is $20 ea.",
+        "I purchased this item to place in my own bent wood ring and it works as advertised.  I've used it in multiple projects and I've had no problems with it.",
+        "AAA+++",
+        "These work pretty well, i can read them from my Google Pixel XL through an otterbox case, but they need ro be within roughly 5mm of the case. I think that's pretty acceptable, especially for the size of the tags.What i wanted to do with the tags was to glue them to a ring and use that to unlock my phone. Unfortunately though, the curvature made the tag very difficult to read with the phone case on and had something like a 10% success rate for reading. I have now repurposes them for use elsewhere and I really like them.My first batch had 5/6 dead tags. If you get dead tags just message the company and they will send you out new ones, very great customer service.",
+        "These tags worked as advertised.  I used one in an MFC ring without any problems."
+    ]
+}
