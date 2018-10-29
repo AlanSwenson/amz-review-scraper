@@ -122,3 +122,12 @@ def scrape(url):
     with open('product.json', 'w') as outfile:
         json.dump(product_json, outfile, indent=4)
     print ('----------Extraction of data is complete. Check json file.----------')
+    class Result:
+        def __init__(self, name, count):
+            self.name = name
+            self.count = count
+            self.count = self.count.replace(',','')
+            self.count = self.count.replace(' customer reviews','')
+
+    return Result(name_of_product, review_count)
+    #return {'name' : name_of_product, 'count' : review_count}
