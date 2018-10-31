@@ -7,6 +7,9 @@ name = "pypi"
 "bs4" = "*"
 flask-sqlalchemy = "*"
 "psycopg2" = "*"
+requests = "*"
+lxml = "*"
+"psycopg2-binary" = "*"
 
 [dev-packages]
 

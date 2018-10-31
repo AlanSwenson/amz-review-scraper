@@ -1,9 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib.request
-import urllib.parse
-import urllib.error
-from bs4 import BeautifulSoup
+#import urllib.request
+#import urllib.parse
+#import urllib.error
+import requests
+import bs4
+import lxml
+#from bs4 import BeautifulSoup
 import ssl
 import json
 
@@ -13,6 +16,11 @@ ctx = ssl.create_default_context()
 ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
+header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'}
+
+proxies = {'http': 'http://lum-customer-hl_9cbcc90f-zone-static:0rtgyzpvghf7@zproxy.lum-superproxy.io:22225',
+           'https': 'https://lum-customer-hl_9cbcc90f-zone-static:0rtgyzpvghf7@zproxy.lum-superproxy.io:22225'
+    }
 
 def create_url(asin):
     url = ("https://www.amazon.com/gp/product/" + asin)
@@ -25,12 +33,13 @@ def create_url(asin):
 
 #url="https://www.amazon.com/gp/product/" + asin
 
-def scrape(url):
+def scrape(url, asin):
 
-    html = urllib.request.urlopen(url, context=ctx).read()
-    soup = BeautifulSoup(html, 'html.parser')
+    html = requests.get(url, headers=header, proxies=proxies)
+    soup = bs4.BeautifulSoup(html.text, 'lxml')
     html = soup.prettify('utf-8')
     product_json = {}
+    review_count = 0
 
     # This block of code will help extract the Brand of the item
 
@@ -75,13 +84,15 @@ def scrape(url):
             break
 
     # This block of code will help extract the number of customer reviews of the product
-
-    for spans in soup.findAll('span', attrs={'id': 'acrCustomerReviewText'
-                              }):
-        if spans.text:
-            review_count = spans.text.strip()
-            product_json['customer-reviews-count'] = review_count
-            break
+    # the first line is needed to grab the correct div with the total reviews
+    for divs in soup.findAll('div', attrs={'id': 'averageCustomerReviews_feature_div'}):
+        for spans in divs.findAll('span', attrs={'id': 'acrCustomerReviewText'
+                                  }):
+            if spans.text:
+                print(spans.text)
+                review_count = spans.text.strip()
+                product_json['customer-reviews-count'] = review_count
+                break
 
     # This block of code will help extract top specifications and details of the product
 
@@ -102,6 +113,9 @@ def scrape(url):
                                attrs={'class': 'a-size-base a-link-normal review-title a-color-base a-text-bold'
                                }):
         short_review = a_tags.text.strip()
+
+        #data = Reviews(asin=asin, review=short_review)
+        #ds.session.add(data)
         product_json['short-reviews'].append(short_review)
 
     # This block of code will help extract the long reviews of the product
@@ -110,6 +124,10 @@ def scrape(url):
     for divs in soup.findAll('div', attrs={'data-hook': 'review-collapsed'
                              }):
         long_review = divs.text.strip()
+
+
+
+
         product_json['long-reviews'].append(long_review)
 
     # Saving the scraped html file
@@ -122,12 +140,16 @@ def scrape(url):
     with open('product.json', 'w') as outfile:
         json.dump(product_json, outfile, indent=4)
     print ('----------Extraction of data is complete. Check json file.----------')
+
+    # Class for returning the Item back for database storage
     class Result:
         def __init__(self, name, count):
             self.name = name
-            self.count = count
-            self.count = self.count.replace(',','')
-            self.count = self.count.replace(' customer reviews','')
+            try:
+                self.count = count.replace(',','')
+                self.count = self.count.replace(' customer reviews','')
+            except:
+                self.count = count
+
 
     return Result(name_of_product, review_count)
-    #return {'name' : name_of_product, 'count' : review_count}

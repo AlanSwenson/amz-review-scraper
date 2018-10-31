@@ -13,7 +13,7 @@ def get_env_variable(name):
         message = "Expected environment variable '{}' not set.".format(name)
         raise Exception(message)
 
-# the values of those depend on your setup
+# import .env variables for DB connection
 POSTGRES_URL = get_env_variable("POSTGRES_URL")
 POSTGRES_USER = get_env_variable("POSTGRES_USER")
 POSTGRES_PW = get_env_variable("POSTGRES_PW")
@@ -21,28 +21,36 @@ POSTGRES_DB = get_env_variable("POSTGRES_DB")
 
 DB_URL = 'postgresql://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
 
-print('URL :' + DB_URL)
+#print('URL :' + DB_URL)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # silence the deprecation warning
 
 db = SQLAlchemy(app)
 
-class Entry(db.Model):
-    __tablename__ = "reviews"
+class Items(db.Model):
+    __tablename__ = "items"
     name = db.Column(db.String)
     customer_reviews_count = db.Column(db.Integer) 
     asin = db.Column(db.String(10), primary_key=True)
 
+class Reviews(db.Model):
+    __tablename__ = "reviews"
+    id = db.Column(db.Integer, primary_key=True)
+    asin = db.Column(db.String(10), primary_key=True)
+    review = db.Column(db.String)
+
+
 def main():
     asin = input("Please enter a vaild ASIN: ")
     url =  amazon.create_url(asin)
-    result = amazon.scrape(url)
-    print(url)
-    print(result.count)
+   # print(url)
+    result = amazon.scrape(url, asin)
+   # print(url)
+   # print(result.count)
 
 
-    reg = Entry(name=result.name, customer_reviews_count=result.count, asin=asin)
+    reg = Items(name=result.name, customer_reviews_count=result.count, asin=asin)
 
     db.session.add(reg)
     db.session.commit()
