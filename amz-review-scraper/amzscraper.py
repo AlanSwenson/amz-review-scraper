@@ -16,7 +16,18 @@ from app import db
 
 header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'}
 
+# This is a great little method, it takes some input, delivers some ouput.
+# But why not make it even simpler!
+# no reason to assign a local variable, only to just return it a second later, just inline that return!
+#
+# And I'm not going to tell you how to live you life, but I feel like the cool kids are using f strings
+# these days. There are also other reasons I don't want to get into, because the details aren't important now!
+#
+# def create_url(asin):
+#     return f"https://www.amazon.com/gp/product/{asin}"
+#
 def create_url(asin):
+
     url = ("https://www.amazon.com/gp/product/" + asin)
     return url
 
