@@ -32,7 +32,22 @@ def create_url(asin):
     return url
 
 def scrape(url, asin):
-
+    # You use this html variable name also below after prettifying. Which looks to be the same object as original,
+    # just transformed some. While truthfully this is not offensive at all in this context, I say in when starting
+    # out to code, to just avoid this practice, which is often called variable shadowing.
+    #
+    # On one hand there are perfect valid use cases for it, and on the other many langauges bane the practice altogether.
+    # I think it has a prone to cause really annoying issues to debug early on, and the exceptions are rare,
+    # and worth an interesting conversation.
+    #
+    # It also makes you stretch the naming muscles harder!
+    # Like somethings in this case, you might change the first name to be something like raw_html
+    # or you could go the other way and rename the html to something like utf8_html prettified_html.
+    # or change both!
+    #
+    # Last thing is when I look for the next occurance of html, it's on line 144!
+    # 96 lines away!
+    # That is much to far away for a variable to be declared before it's use.
     html = requests.get(url, headers=header, proxies=proxies)
     soup = bs4.BeautifulSoup(html.text, 'lxml')
     html = soup.prettify('utf-8')
