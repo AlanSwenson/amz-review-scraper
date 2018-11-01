@@ -1,37 +1,24 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-#import urllib.request
-#import urllib.parse
-#import urllib.error
 import requests
 import bs4
 import lxml
-#from bs4 import BeautifulSoup
 import ssl
 import json
+from config import proxies
+from app import db
 
 # For ignoring SSL certificate errors
 
-ctx = ssl.create_default_context()
-ctx.check_hostname = False
-ctx.verify_mode = ssl.CERT_NONE
+#ctx = ssl.create_default_context()
+#ctx.check_hostname = False
+#ctx.verify_mode = ssl.CERT_NONE
 
 header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'}
-
-proxies = {'http': 'http://lum-customer-hl_9cbcc90f-zone-static:0rtgyzpvghf7@zproxy.lum-superproxy.io:22225',
-           'https': 'https://lum-customer-hl_9cbcc90f-zone-static:0rtgyzpvghf7@zproxy.lum-superproxy.io:22225'
-    }
 
 def create_url(asin):
     url = ("https://www.amazon.com/gp/product/" + asin)
     return url
-
-
-#url=input("Enter Amazon Product Url- ")
-#asin = input("Please enter a vaild ASIN: ")
-#url = create_url(asin)
-
-#url="https://www.amazon.com/gp/product/" + asin
 
 def scrape(url, asin):
 
@@ -151,5 +138,9 @@ def scrape(url, asin):
             except:
                 self.count = count
 
+    #reg = Items(name_of_product, review_count)
+    #reg = Items(name=Result.name, customer_reviews_count=result.count, asin=asin)
 
+    #db.session.add(reg)
+    #db.session.commit()
     return Result(name_of_product, review_count)
