@@ -17,14 +17,12 @@ from app import db
 header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'}
 
 def create_url(asin):
-    url = ("https://www.amazon.com/gp/product/" + asin)
-    return url
+    return f"https://www.amazon.com/gp/product/{asin}"
 
 def scrape(url, asin):
 
-    html = requests.get(url, headers=header, proxies=proxies)
-    soup = bs4.BeautifulSoup(html.text, 'lxml')
-    html = soup.prettify('utf-8')
+    raw_html = requests.get(url, headers=header, proxies=proxies)
+    soup = bs4.BeautifulSoup(raw_html.text, 'lxml')
     product_json = {}
     review_count = 0
 
@@ -118,9 +116,9 @@ def scrape(url, asin):
         product_json['long-reviews'].append(long_review)
 
     # Saving the scraped html file
-
-    with open('output_file.html', 'wb') as file:
-        file.write(html)
+    # pretty_html = soup.prettify('utf-8')
+    # with open('output_file.html', 'wb') as file:
+    #    file.write(pretty_html)
 
     # Saving the scraped data in json format
 
@@ -130,13 +128,13 @@ def scrape(url, asin):
 
     # Class for returning the Item back for database storage
     class Result:
-        def __init__(self, name, count):
+        def __init__(self, name, reviews):
             self.name = name
             try:
-                self.count = count.replace(',','')
-                self.count = self.count.replace(' customer reviews','')
+                self.reviews = reviews.replace(',','')
+                self.reviews = self.reviews.replace(' customer reviews','')
             except:
-                self.count = count
+                self.reviews = reviews
 
     #reg = Items(name_of_product, review_count)
     #reg = Items(name=Result.name, customer_reviews_count=result.count, asin=asin)
