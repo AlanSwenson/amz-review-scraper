@@ -7,6 +7,7 @@ import ssl
 import json
 from config import proxies
 from app import db
+import models
 
 # For ignoring SSL certificate errors
 
@@ -133,12 +134,22 @@ def scrape(url, asin):
             try:
                 self.reviews = reviews.replace(',','')
                 self.reviews = self.reviews.replace(' customer reviews','')
+                # & mess up the save to DB -- this doesn't work???
+                # self.name = name.replace('&','and')
             except:
                 self.reviews = reviews
 
-    #reg = Items(name_of_product, review_count)
-    #reg = Items(name=Result.name, customer_reviews_count=result.count, asin=asin)
 
-    #db.session.add(reg)
-    #db.session.commit()
-    return Result(name_of_product, review_count)
+    result = Result(name_of_product, review_count)
+
+    try:
+            scraped_item = models.Items( name=result.name,
+                                    customer_reviews_count=result.reviews,
+                                    asin=asin)
+
+            db.session.add(scraped_item)
+            db.session.commit()
+    except:
+            print('An Error Occured While Saving Item to DB')
+
+    return
