@@ -100,21 +100,15 @@ def scrape(url, asin):
                                }):
         short_review = a_tags.text.strip()
 
+
+
         #data = Reviews(asin=asin, review=short_review)
         #ds.session.add(data)
         product_json['short-reviews'].append(short_review)
 
     # This block of code will help extract the long reviews of the product
 
-    product_json['long-reviews'] = []
-    for divs in soup.findAll('div', attrs={'data-hook': 'review-collapsed'
-                             }):
-        long_review = divs.text.strip()
 
-
-
-
-        product_json['long-reviews'].append(long_review)
 
     # Saving the scraped html file
     # pretty_html = soup.prettify('utf-8')
@@ -123,9 +117,9 @@ def scrape(url, asin):
 
     # Saving the scraped data in json format
 
-    with open('product.json', 'w') as outfile:
-        json.dump(product_json, outfile, indent=4)
-    print ('----------Extraction of data is complete. Check json file.----------')
+    #with open('product.json', 'w') as outfile:
+    #    json.dump(product_json, outfile, indent=4)
+    #print ('----------Extraction of data is complete. Check json file.----------')
 
     # Class for returning the Item back for database storage
     class Result:
@@ -143,13 +137,39 @@ def scrape(url, asin):
     result = Result(name_of_product, review_count)
 
     try:
-            scraped_item = models.Items( name=result.name,
+        scraped_item = models.Items( name=result.name,
                                     customer_reviews_count=result.reviews,
                                     asin=asin)
 
-            db.session.add(scraped_item)
-            db.session.commit()
+        db.session.add(scraped_item)
+
     except:
-            print('An Error Occured While Saving Item to DB')
+        print('An Error Occured While Saving Item to DB')
+        db.session.rollback()
+        raise
+
+
+    product_json['long-reviews'] = []
+    for divs in soup.findAll('div', attrs={'data-hook': 'review-collapsed'
+                             }):
+        long_review = divs.text.strip()
+        try:
+            scraped_review = models.Review(  review=long_review,
+                                            asin=asin, owner=scraped_item)
+
+            db.session.add(scraped_review)
+        except:
+            print('An Error Occured While Adding a Review')
+            raise
+        product_json['long-reviews'].append(long_review)
+
+    try:
+        db.session.commit()
+    except:
+        print('An Error Occured While Saving to DB')
+        db.session.rollback()
+        raise
+    finally:
+        db.session.close()
 
     return

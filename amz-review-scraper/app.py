@@ -35,7 +35,6 @@ def main():
             amazon.scrape(url, asin)
         except:
             print('An Error Occured While Scraping')
-        # if the first item fails to store in DB all subsequent items fail
         selection = input('Do you have another ASIN? (y/n) ')
         if selection == 'n':
             break
