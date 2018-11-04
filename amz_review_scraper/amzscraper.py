@@ -7,24 +7,16 @@ import ssl
 import json
 from config import proxies
 from app import db
-
-# For ignoring SSL certificate errors
-
-#ctx = ssl.create_default_context()
-#ctx.check_hostname = False
-#ctx.verify_mode = ssl.CERT_NONE
+import models
 
 header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'}
 
-def create_url(asin):
-    url = ("https://www.amazon.com/gp/product/" + asin)
-    return url
 
 def scrape(url, asin):
-
-    html = requests.get(url, headers=header, proxies=proxies)
-    soup = bs4.BeautifulSoup(html.text, 'lxml')
-    html = soup.prettify('utf-8')
+    #print(type(proxies))
+    print("Asin " + asin)
+    raw_html = requests.get(url, headers=header, proxies=proxies)
+    soup = bs4.BeautifulSoup(raw_html.text, 'lxml')
     product_json = {}
     review_count = 0
 
@@ -101,46 +93,76 @@ def scrape(url, asin):
                                }):
         short_review = a_tags.text.strip()
 
+
+
         #data = Reviews(asin=asin, review=short_review)
         #ds.session.add(data)
         product_json['short-reviews'].append(short_review)
 
     # This block of code will help extract the long reviews of the product
 
+
+
+    # Saving the scraped html file
+    # pretty_html = soup.prettify('utf-8')
+    # with open('output_file.html', 'wb') as file:
+    #    file.write(pretty_html)
+
+    # Saving the scraped data in json format
+
+    #with open('product.json', 'w') as outfile:
+    #    json.dump(product_json, outfile, indent=4)
+    #print ('----------Extraction of data is complete. Check json file.----------')
+
+    # Class for returning the Item back for database storage
+    class Result:
+        def __init__(self, name, reviews):
+            self.name = name
+            try:
+                self.reviews = reviews.replace(',','')
+                self.reviews = self.reviews.replace(' customer reviews','')
+                # & mess up the save to DB -- this doesn't work???
+                # self.name = name.replace('&','and')
+            except:
+                self.reviews = reviews
+
+
+    result = Result(name_of_product, review_count)
+
+    try:
+        scraped_item = models.Items( name=result.name,
+                                    customer_reviews_count=result.reviews,
+                                    asin=asin)
+
+        db.session.add(scraped_item)
+
+    except:
+        print('An Error Occured While Saving Item to DB')
+        db.session.rollback()
+        raise
+
+
     product_json['long-reviews'] = []
     for divs in soup.findAll('div', attrs={'data-hook': 'review-collapsed'
                              }):
         long_review = divs.text.strip()
+        try:
+            scraped_review = models.Review(  review=long_review,
+                                            asin=asin, owner=scraped_item)
 
-
-
-
+            db.session.add(scraped_review)
+        except:
+            print('An Error Occured While Adding a Review')
+            raise
         product_json['long-reviews'].append(long_review)
 
-    # Saving the scraped html file
+    try:
+        db.session.commit()
+    except:
+        print('An Error Occured While Saving to DB')
+        db.session.rollback()
+        raise
+    finally:
+        db.session.close()
 
-    with open('output_file.html', 'wb') as file:
-        file.write(html)
-
-    # Saving the scraped data in json format
-
-    with open('product.json', 'w') as outfile:
-        json.dump(product_json, outfile, indent=4)
-    print ('----------Extraction of data is complete. Check json file.----------')
-
-    # Class for returning the Item back for database storage
-    class Result:
-        def __init__(self, name, count):
-            self.name = name
-            try:
-                self.count = count.replace(',','')
-                self.count = self.count.replace(' customer reviews','')
-            except:
-                self.count = count
-
-    #reg = Items(name_of_product, review_count)
-    #reg = Items(name=Result.name, customer_reviews_count=result.count, asin=asin)
-
-    #db.session.add(reg)
-    #db.session.commit()
-    return Result(name_of_product, review_count)
+    return
