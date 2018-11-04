@@ -8,11 +8,29 @@ import json
 from config import proxies
 from app import db
 
+
+# Whenever you comment out some code, thats a good sign you probably
+# want to make it configurable.
+# A simple and popular way would be use an environment variable.
+# This is also common in many languages, as they all typically have access to the underlying environment
+# they are running in.
+# import os
+# if os.environ["IGNORE_SSL_ERRORS"]:
+#     ctx = ssl.create_default_context()
+#     ctx.check_hostname = False
+#     ctx.verify_mode = ssl.CERT_NONE
+
 # For ignoring SSL certificate errors
 
 #ctx = ssl.create_default_context()
 #ctx.check_hostname = False
 #ctx.verify_mode = ssl.CERT_NONE
+
+# Anytime you have a local variable that is meant to be stastic and is declared at the top of a file,
+# or class, you probably want it to be a constant. In some langauges this is really important, for example it might
+# help performance. In python it doesn't really matter as much, but it's more about declaring your
+# intentions. You ar esaying hey this value aint changing.
+# HEADER = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'}
 
 header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'}
 
