@@ -1,5 +1,5 @@
 import pytest
-from urls import create_url
+from amz_review_scraper.urls import create_url
 
 def test_valid_url():
     url = create_url('B07HJXVHSS')
