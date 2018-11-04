@@ -9,6 +9,10 @@ from config import proxies
 from app import db
 import models
 
+#proxies = { 'http' : 'http://lum-customer-hl_9cbcc90f-zone-static:0rtgyzpvghf7@zproxy.lum-superproxy.io:22225',
+#           'https': 'https://lum-customer-hl_9cbcc90f-zone-static:0rtgyzpvghf7@zproxy.lum-superproxy.io:22225'
+#    }
+
 # For ignoring SSL certificate errors
 
 #ctx = ssl.create_default_context()
@@ -17,11 +21,10 @@ import models
 
 header = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0'}
 
-def create_url(asin):
-    return f"https://www.amazon.com/gp/product/{asin}"
 
 def scrape(url, asin):
-
+    #print(type(proxies))
+    print("Asin " + asin)
     raw_html = requests.get(url, headers=header, proxies=proxies)
     soup = bs4.BeautifulSoup(raw_html.text, 'lxml')
     product_json = {}

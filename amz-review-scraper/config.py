@@ -16,7 +16,9 @@ POSTGRES_DB = get_env_variable("POSTGRES_DB")
 
 # This is pulling in a dict and making it a string
 # proxies
-proxies = get_env_variable("proxies")
+http = get_env_variable('http')
+https = get_env_variable('https')
+proxies = {'http' : http, 'https' : https}
 
 
 DB_URL = 'postgresql://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)

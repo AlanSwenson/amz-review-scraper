@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import sys
 import amzscraper as amazon
+import urls
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -31,10 +32,11 @@ def main():
             asin = get_valid_asin()
             # Concatonates a standard Amazon Url with no extras with the ASIN
             # at the end for use in Scraping
-            url =  amazon.create_url(asin)
+            url =  urls.create_url(asin)
             amazon.scrape(url, asin)
         except:
             print('An Error Occured While Scraping')
+            raise
         selection = input('Do you have another ASIN? (y/n) ')
         if selection == 'n':
             break
