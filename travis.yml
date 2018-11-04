@@ -16,3 +16,8 @@ install:
 # to start the test
 script:
   - 'python -m pytest'
+branches:
+  only:
+  - master
+  - dev
+  - dbwork
