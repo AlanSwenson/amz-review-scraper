@@ -8,7 +8,8 @@ install:
   - 'pip install pipenv'
   - 'pipenv install'
 # to start the test
-script: python -m pytest
+script:
+  - python -m pytest
   - black --check --verbose
 branches:
   only:
