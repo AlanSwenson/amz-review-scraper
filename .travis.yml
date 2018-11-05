@@ -9,6 +9,7 @@ install:
   - 'pipenv install'
 # to start the test
 script: python -m pytest
+  - black --check --verbose .; fi
 branches:
   only:
   - gh-pages

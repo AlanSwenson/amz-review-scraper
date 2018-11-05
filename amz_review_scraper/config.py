@@ -1,11 +1,13 @@
 import os
 
+
 def get_env_variable(name):
     try:
         return os.environ.get(name)
     except KeyError:
         message = "Expected environment variable '{}' not set.".format(name)
         raise Exception(message)
+
 
 # import .env variables for DB connection
 POSTGRES_URL = get_env_variable("POSTGRES_URL")
@@ -16,12 +18,14 @@ POSTGRES_DB = get_env_variable("POSTGRES_DB")
 
 # This is pulling in a dict and making it a string
 # proxies
-http = get_env_variable('http')
-https = get_env_variable('https')
-proxies = {'http' : http, 'https' : https}
+http = get_env_variable("http")
+https = get_env_variable("https")
+proxies = {"http": http, "https": https}
 
 
-DB_URL = 'postgresql://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
+DB_URL = "postgresql://{user}:{pw}@{url}/{db}".format(
+    user=POSTGRES_USER, pw=POSTGRES_PW, url=POSTGRES_URL, db=POSTGRES_DB
+)
 
 
 class Config(object):
