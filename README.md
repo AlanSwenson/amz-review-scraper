@@ -1,5 +1,6 @@
 amz-review-scraper
 ===
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 What do I do?
 
@@ -12,4 +13,4 @@ Input an ASIN and the corresponding Amazon listing will be scraped and its Revie
 
 How do you contribute to me?
 
-Not sure yet. Ill get back to you on that one.
+In this project I am learning and practicing a number of skills, if you would like to comment on my code in places I could write better code, it would be much appreciated.
