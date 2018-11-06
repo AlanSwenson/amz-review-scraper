@@ -6,7 +6,7 @@ python:
 # command to install dependencies
 install:
   - 'pip install pipenv'
-  - 'pipenv lock --clear'
+  - 'pipenv sync'
   - 'pipenv install'
 # to start the test
 script:
