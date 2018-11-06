@@ -12,6 +12,7 @@ lxml = "*"
 "psycopg2-binary" = "*"
 flask-migrate = "*"
 black = "*"
+mock = "*"
 
 [dev-packages]
 
