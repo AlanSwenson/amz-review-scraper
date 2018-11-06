@@ -14,13 +14,27 @@ header = {
 }
 
 
+# def find_attribute(soup, key, html_tag, attrs):
+#    temp_json = {}
+#    print(attrs)
+#    for divs in soup.findAll(html_tag, attrs=attrs):
+#        temp_json = divs[key]
+#        print("temp =" + temp_json)
+#    return temp_json
+# return next((divs[key] for divs in soup.findAll(html_tag, attrs=attrs):
+#        if divs[key] is not null))
+
+
 def scrape(url, asin):
-    # print(type(proxies))
-    print("Asin " + asin)
+    # print("Asin " + asin)
     raw_html = requests.get(url, headers=header, proxies=proxies)
     soup = bs4.BeautifulSoup(raw_html.text, "lxml")
     product_json = {}
     review_count = 0
+
+    # product_json["brand"] = find_attribute(
+    #    soup, "data-brand", "div", attrs={"class": "a-box-group"}
+    # )
 
     # This block of code will help extract the Brand of the item
 
@@ -31,13 +45,6 @@ def scrape(url, asin):
         except:
             pass
 
-    # This block of code will help extract the Prodcut Title of the item
-
-    for spans in soup.findAll("span", attrs={"id": "productTitle"}):
-        name_of_product = spans.text.strip()
-        product_json["name"] = name_of_product
-        break
-
     # This block of code will help extract the price of the item in dollars
 
     for divs in soup.findAll("div"):
@@ -47,6 +54,13 @@ def scrape(url, asin):
             break
         except:
             pass
+
+    # This block of code will help extract the Prodcut Title of the item
+
+    for spans in soup.findAll("span", attrs={"id": "productTitle"}):
+        name_of_product = spans.text.strip()
+        product_json["name"] = name_of_product
+        break
 
     # This block of code will help extract the image of the item in dollars
 
@@ -108,9 +122,9 @@ def scrape(url, asin):
 
     # Saving the scraped data in json format
 
-    # with open('product.json', 'w') as outfile:
-    #    json.dump(product_json, outfile, indent=4)
-    # print ('----------Extraction of data is complete. Check json file.----------')
+    with open("product.json", "w") as outfile:
+        json.dump(product_json, outfile, indent=4)
+        print("----------Extraction of data is complete. Check json file.----------")
 
     # Class for returning the Item back for database storage
     class Result:

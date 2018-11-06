@@ -7,7 +7,6 @@ python:
 install:
   - 'pip install pipenv'
   - 'pipenv sync'
- # - 'pipenv install'
 # to start the test
 script:
   - python -m pytest
