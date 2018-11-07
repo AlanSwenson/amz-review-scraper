@@ -14,46 +14,28 @@ header = {
 }
 
 
-# def find_attribute(soup, key, html_tag, attrs):
-#    temp_json = {}
-#    print(attrs)
-#    for divs in soup.findAll(html_tag, attrs=attrs):
-#        temp_json = divs[key]
-#        print("temp =" + temp_json)
-#    return temp_json
-# return next((divs[key] for divs in soup.findAll(html_tag, attrs=attrs):
-#        if divs[key] is not null))
+def find_attribute(soup, search_tag, key, html_tag, attrs):
+    for divs in soup.findAll(html_tag, attrs=attrs):
+        try:
+            return divs[key]
+        except:
+            pass
+    return "None"
 
 
 def scrape(url, asin):
-    # print("Asin " + asin)
     raw_html = requests.get(url, headers=header, proxies=proxies)
     soup = bs4.BeautifulSoup(raw_html.text, "lxml")
     product_json = {}
     review_count = 0
 
-    # product_json["brand"] = find_attribute(
-    #    soup, "data-brand", "div", attrs={"class": "a-box-group"}
-    # )
+    product_json["brand"] = find_attribute(
+        soup, "divs", "data-brand", "div", attrs={"class": "a-box-group"}
+    )
 
-    # This block of code will help extract the Brand of the item
-
-    for divs in soup.findAll("div", attrs={"class": "a-box-group"}):
-        try:
-            product_json["brand"] = divs["data-brand"]
-            break
-        except:
-            pass
-
-    # This block of code will help extract the price of the item in dollars
-
-    for divs in soup.findAll("div"):
-        try:
-            price = str(divs["data-asin-price"])
-            product_json["price"] = "$" + price
-            break
-        except:
-            pass
+    product_json["price"] = "$" + str(
+        find_attribute(soup, "divs", "data-asin-price", "div", attrs={})
+    )
 
     # This block of code will help extract the Prodcut Title of the item
 
