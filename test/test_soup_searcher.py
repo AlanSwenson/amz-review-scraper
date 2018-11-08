@@ -5,7 +5,7 @@ import bs4
 import os
 
 my_path = os.path.abspath(os.path.dirname(__file__))
-path = os.path.join(my_path, "materials/output_file.html")
+path = os.path.join(my_path, "materials/sample_output_file.html")
 
 raw_html = codecs.open(path,'r')
 soup = bs4.BeautifulSoup(raw_html, "lxml")
