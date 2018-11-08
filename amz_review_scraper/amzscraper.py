@@ -8,19 +8,11 @@ import json
 from config import proxies
 from app import db
 import models
+from soup_searcher import find_attribute
 
 header = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0"
 }
-
-
-def find_attribute(soup, search_tag, key, html_tag, attrs):
-    for divs in soup.findAll(html_tag, attrs=attrs):
-        try:
-            return divs[key]
-        except:
-            pass
-    return "None"
 
 
 def scrape(url, asin):
@@ -30,19 +22,16 @@ def scrape(url, asin):
     review_count = 0
 
     product_json["brand"] = find_attribute(
-        soup, "divs", "data-brand", "div", attrs={"class": "a-box-group"}
+        soup, "data-brand", "div", attrs={"class": "a-box-group"}
     )
 
     product_json["price"] = "$" + str(
-        find_attribute(soup, "divs", "data-asin-price", "div", attrs={})
+        find_attribute(soup, "data-asin-price", "div", attrs={})
     )
 
-    # This block of code will help extract the Prodcut Title of the item
-
-    for spans in soup.findAll("span", attrs={"id": "productTitle"}):
-        name_of_product = spans.text.strip()
-        product_json["name"] = name_of_product
-        break
+    product_json["name"] = find_attribute(
+        soup, "data-asin-price", "span", attrs={"id": "productTitle"}
+    )
 
     # This block of code will help extract the image of the item in dollars
 
@@ -120,7 +109,7 @@ def scrape(url, asin):
             except:
                 self.reviews = reviews
 
-    result = Result(name_of_product, review_count)
+    result = Result(product_json["name"], review_count)
 
     try:
         scraped_item = models.Items(
