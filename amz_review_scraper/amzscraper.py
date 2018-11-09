@@ -6,61 +6,32 @@ import lxml
 import ssl
 import json
 from config import proxies
-from app import db
 import models
+from soup_searcher import find_attribute
+import cleanup
 
-header = {
+HEADER = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0"
 }
 
 
-# def find_attribute(soup, key, html_tag, attrs):
-#    temp_json = {}
-#    print(attrs)
-#    for divs in soup.findAll(html_tag, attrs=attrs):
-#        temp_json = divs[key]
-#        print("temp =" + temp_json)
-#    return temp_json
-# return next((divs[key] for divs in soup.findAll(html_tag, attrs=attrs):
-#        if divs[key] is not null))
-
-
 def scrape(url, asin):
-    # print("Asin " + asin)
-    raw_html = requests.get(url, headers=header, proxies=proxies)
+    raw_html = requests.get(url, headers=HEADER, proxies=proxies)
     soup = bs4.BeautifulSoup(raw_html.text, "lxml")
     product_json = {}
     review_count = 0
 
-    # product_json["brand"] = find_attribute(
-    #    soup, "data-brand", "div", attrs={"class": "a-box-group"}
-    # )
+    product_json["brand"] = find_attribute(
+        soup, "data-brand", "div", attrs={"class": "a-box-group"}
+    )
 
-    # This block of code will help extract the Brand of the item
+    product_json["price"] = "$" + str(
+        find_attribute(soup, "data-asin-price", "div", attrs={})
+    )
 
-    for divs in soup.findAll("div", attrs={"class": "a-box-group"}):
-        try:
-            product_json["brand"] = divs["data-brand"]
-            break
-        except:
-            pass
-
-    # This block of code will help extract the price of the item in dollars
-
-    for divs in soup.findAll("div"):
-        try:
-            price = str(divs["data-asin-price"])
-            product_json["price"] = "$" + price
-            break
-        except:
-            pass
-
-    # This block of code will help extract the Prodcut Title of the item
-
-    for spans in soup.findAll("span", attrs={"id": "productTitle"}):
-        name_of_product = spans.text.strip()
-        product_json["name"] = name_of_product
-        break
+    product_json["name"] = find_attribute(
+        soup, "data-asin-price", "span", attrs={"id": "productTitle"}
+    )
 
     # This block of code will help extract the image of the item in dollars
 
@@ -109,8 +80,6 @@ def scrape(url, asin):
     ):
         short_review = a_tags.text.strip()
 
-        # data = Reviews(asin=asin, review=short_review)
-        # ds.session.add(data)
         product_json["short-reviews"].append(short_review)
 
     # This block of code will help extract the long reviews of the product
@@ -126,30 +95,16 @@ def scrape(url, asin):
         json.dump(product_json, outfile, indent=4)
         print("----------Extraction of data is complete. Check json file.----------")
 
-    # Class for returning the Item back for database storage
-    class Result:
-        def __init__(self, name, reviews):
-            self.name = name
-            try:
-                self.reviews = reviews.replace(",", "")
-                self.reviews = self.reviews.replace(" customer reviews", "")
-                # & mess up the save to DB -- this doesn't work???
-                # self.name = name.replace('&','and')
-            except:
-                self.reviews = reviews
-
-    result = Result(name_of_product, review_count)
+    review_count = cleanup.review_count_cleanup(review_count)
 
     try:
-        scraped_item = models.Items(
-            name=result.name, customer_reviews_count=result.reviews, asin=asin
+        scraped_item = models.Item(
+            name=product_json["name"], customer_reviews_count=review_count, asin=asin
         )
-
-        db.session.add(scraped_item)
+        scraped_item.save()
 
     except:
-        print("An Error Occured While Saving Item to DB")
-        db.session.rollback()
+        models.db_error("Item")
         raise
 
     product_json["long-reviews"] = []
@@ -159,20 +114,12 @@ def scrape(url, asin):
             scraped_review = models.Review(
                 review=long_review, asin=asin, owner=scraped_item
             )
-
-            db.session.add(scraped_review)
+            scraped_review.save()
         except:
-            print("An Error Occured While Adding a Review")
+            models.db_error("Review")
             raise
         product_json["long-reviews"].append(long_review)
 
-    try:
-        db.session.commit()
-    except:
-        print("An Error Occured While Saving to DB")
-        db.session.rollback()
-        raise
-    finally:
-        db.session.close()
+    models.save_to_db()
 
     return
