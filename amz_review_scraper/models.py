@@ -27,14 +27,14 @@ class Review(db.Model):
 def save_to_db():
     try:
         db.session.commit()
-    except:
-        print("An Error Occured While Saving to DB")
+    except Exception as e:
+        print(f"An Error Occurred While Saving to DB: {e}")
         db.session.rollback()
         raise
     finally:
         db.session.close()
 
 
-def db_error(warning):
-    f"An Error Occured While Saving {warning} to DB"
+def db_error(warning, e):
+    print(f"An Error Occured While Saving {warning} to DB: {e}")
     db.session.rollback()
