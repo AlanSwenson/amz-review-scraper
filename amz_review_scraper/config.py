@@ -22,6 +22,10 @@ http = get_env_variable("http")
 https = get_env_variable("https")
 proxies = {"http": http, "https": https}
 
+HEADER = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0"
+}
+
 
 DB_URL = "postgresql://{user}:{pw}@{url}/{db}".format(
     user=POSTGRES_USER, pw=POSTGRES_PW, url=POSTGRES_URL, db=POSTGRES_DB

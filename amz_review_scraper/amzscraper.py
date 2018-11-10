@@ -1,23 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import requests
-import bs4
-import lxml
 import ssl
 import json
-from config import proxies
 import models
 from soup_searcher import find_attribute
 import cleanup
 
-HEADER = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0"
-}
 
+def scrape(soup, asin):
 
-def scrape(url, asin):
-    raw_html = requests.get(url, headers=HEADER, proxies=proxies)
-    soup = bs4.BeautifulSoup(raw_html.text, "lxml")
     product_json = {}
     product_json["customer-reviews-count"] = 0
 
