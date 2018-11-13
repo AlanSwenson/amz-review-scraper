@@ -77,7 +77,12 @@ def scrape(soup, asin):
         scraped_item = models.Item(
             name=product_json["name"], customer_reviews_count=review_count, asin=asin
         )
-        scraped_item.save()
+        # TODO: think of a better name than item_exists
+        item_exists = scraped_item.check()
+        if item_exists == None:
+            scraped_item.save()
+        else:
+            scraped_item = item_exists
 
     except Exception as e:
         models.db_error("Item", e)
@@ -91,12 +96,14 @@ def scrape(soup, asin):
             scraped_review = models.Review(
                 review=long_review, asin=asin, owner=scraped_item
             )
-            scraped_review.save()
+            review_exists = scraped_review.check()
+            if review_exists == None:
+                scraped_review.save()
+            else:
+                pass
         except Exception as e:
             models.db_error("Review", e)
             raise
         product_json["long-reviews"].append(long_review)
-
-    models.save_to_db()
-
+        models.save_to_db()
     return

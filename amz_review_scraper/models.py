@@ -12,6 +12,9 @@ class Item(db.Model):
     def save(self):
         db.session.add(self)
 
+    def check(self):
+        return db.session.query(Item).filter_by(asin=self.asin).scalar()
+
 
 class Review(db.Model):
     __tablename__ = "review"
@@ -22,6 +25,14 @@ class Review(db.Model):
 
     def save(self):
         db.session.add(self)
+
+    def check(self):
+        return (
+            db.session.query(Review)
+            .filter_by(asin=self.asin)
+            .filter_by(review=self.review)
+            .scalar()
+        )
 
 
 def save_to_db():
