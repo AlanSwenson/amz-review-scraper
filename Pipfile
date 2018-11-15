@@ -13,6 +13,7 @@ lxml = "*"
 flask-migrate = "*"
 black = "*"
 mock = "*"
+pytest = "*"
 
 [dev-packages]
 
