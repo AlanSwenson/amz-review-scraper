@@ -1,25 +1,16 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import requests
-import bs4
-import lxml
 import ssl
 import json
-from config import proxies
 import models
 from soup_searcher import find_attribute
 import cleanup
 
-HEADER = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0"
-}
 
+def scrape(soup, asin):
 
-def scrape(url, asin):
-    raw_html = requests.get(url, headers=HEADER, proxies=proxies)
-    soup = bs4.BeautifulSoup(raw_html.text, "lxml")
     product_json = {}
-    review_count = 0
+    product_json["customer-reviews-count"] = 0
 
     product_json["brand"] = find_attribute(
         soup, "data-brand", "div", attrs={"class": "a-box-group"}
@@ -30,15 +21,14 @@ def scrape(url, asin):
     )
 
     product_json["name"] = find_attribute(
-        soup, "data-asin-price", "span", attrs={"id": "productTitle"}
+        soup, None, "span", attrs={"id": "productTitle"}
     )
 
-    # This block of code will help extract the image of the item in dollars
+    product_json["customer-reviews-count"] = find_attribute(
+        soup, None, "div", attrs={"id": "averageCustomerReviews_feature_div"}
+    )
 
-    for divs in soup.findAll("div", attrs={"id": "rwImages_hidden"}):
-        for img_tag in divs.findAll("img", attrs={"style": "display:none;"}):
-            product_json["img-url"] = img_tag["src"]
-            break
+    review_count = cleanup.review_count_cleanup(product_json["customer-reviews-count"])
 
     # This block of code will help extract the average star rating of the product
 
@@ -46,16 +36,6 @@ def scrape(url, asin):
         for spans in i_tags.findAll("span", attrs={"class": "a-icon-alt"}):
             product_json["star-rating"] = spans.text.strip()
             break
-
-    # This block of code will help extract the number of customer reviews of the product
-    # the first line is needed to grab the correct div with the total reviews
-    for divs in soup.findAll("div", attrs={"id": "averageCustomerReviews_feature_div"}):
-        for spans in divs.findAll("span", attrs={"id": "acrCustomerReviewText"}):
-            if spans.text:
-                print(spans.text)
-                review_count = spans.text.strip()
-                product_json["customer-reviews-count"] = review_count
-                break
 
     # This block of code will help extract top specifications and details of the product
 
@@ -82,8 +62,6 @@ def scrape(url, asin):
 
         product_json["short-reviews"].append(short_review)
 
-    # This block of code will help extract the long reviews of the product
-
     # Saving the scraped html file
     # pretty_html = soup.prettify('utf-8')
     # with open('output_file.html', 'wb') as file:
@@ -95,18 +73,22 @@ def scrape(url, asin):
         json.dump(product_json, outfile, indent=4)
         print("----------Extraction of data is complete. Check json file.----------")
 
-    review_count = cleanup.review_count_cleanup(review_count)
-
     try:
         scraped_item = models.Item(
             name=product_json["name"], customer_reviews_count=review_count, asin=asin
         )
-        scraped_item.save()
+        # TODO: think of a better name than item_exists
+        item_exists = scraped_item.check()
+        if item_exists == None:
+            scraped_item.save()
+        else:
+            scraped_item = item_exists
 
-    except:
-        models.db_error("Item")
+    except Exception as e:
+        models.db_error("Item", e)
         raise
 
+    # This block of code will help extract the long reviews of the product
     product_json["long-reviews"] = []
     for divs in soup.findAll("div", attrs={"data-hook": "review-collapsed"}):
         long_review = divs.text.strip()
@@ -114,12 +96,14 @@ def scrape(url, asin):
             scraped_review = models.Review(
                 review=long_review, asin=asin, owner=scraped_item
             )
-            scraped_review.save()
-        except:
-            models.db_error("Review")
+            review_exists = scraped_review.check()
+            if review_exists == None:
+                scraped_review.save()
+            else:
+                pass
+        except Exception as e:
+            models.db_error("Review", e)
             raise
         product_json["long-reviews"].append(long_review)
-
-    models.save_to_db()
-
+        models.save_to_db()
     return

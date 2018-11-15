@@ -17,22 +17,21 @@ pipenv shell
 ```
 ## How do you use me?
 
+
 ### To run the app use:
 ```bash
 python app.py
 ```
+
+Input an ASIN and the corresponding Amazon listing will be scraped and its Review Data added to Postgres DB
 
 ### To run the tests use:
 ```bash
 pytest
 ```
 
-
-Input an ASIN and the corresponding Amazon listing will be scraped and its Review Data added to Postgres DB
-
-
 ## How do you contribute to me?
 
 In this project I am learning and practicing a number of skills, if you would like to comment on my code in places I could write better code, it would be much appreciated.
 
-The project uses [Travis CI](https://travis-ci.org/) to automate testing and [Python Black](https://github.com/pytest-dev/pytest) for Formatting and Automatic Format Checking
+The project uses [Travis CI](https://travis-ci.org/) to automate testing and [Python Black](https://github.com/ambv/black) for Formatting and Automatic Format Checking

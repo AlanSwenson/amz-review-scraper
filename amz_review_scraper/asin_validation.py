@@ -4,10 +4,9 @@
 # example of seemingly valid ASIN = B011111111
 
 
-
 def get_valid_asin():
     while True:
-        asin = input("Please enter a vaild ASIN: ")
+        asin = input("Please enter a vaild ASIN: ").strip().upper()
         if not len(asin) == 10:
             print("Invalid ASIN")
             continue

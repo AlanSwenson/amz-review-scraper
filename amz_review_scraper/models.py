@@ -12,6 +12,9 @@ class Item(db.Model):
     def save(self):
         db.session.add(self)
 
+    def check(self):
+        return db.session.query(Item).filter_by(asin=self.asin).scalar()
+
 
 class Review(db.Model):
     __tablename__ = "review"
@@ -23,18 +26,26 @@ class Review(db.Model):
     def save(self):
         db.session.add(self)
 
+    def check(self):
+        return (
+            db.session.query(Review)
+            .filter_by(asin=self.asin)
+            .filter_by(review=self.review)
+            .scalar()
+        )
+
 
 def save_to_db():
     try:
         db.session.commit()
-    except:
-        print("An Error Occured While Saving to DB")
+    except Exception as e:
+        print(f"An Error Occurred While Saving to DB: {e}")
         db.session.rollback()
         raise
     finally:
         db.session.close()
 
 
-def db_error(warning):
-    f"An Error Occured While Saving {warning} to DB"
+def db_error(warning, e):
+    print(f"An Error Occured While Saving {warning} to DB: {e}")
     db.session.rollback()
