@@ -1,17 +1,19 @@
 from app import db
 
-
-# db = SQLAlchemy(app)
-
-
 # Maybe change this to Item?
-class Items(db.Model):
+class Item(db.Model):
     __tablename__ = "items"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     customer_reviews_count = db.Column(db.Integer)
     asin = db.Column(db.String(10), unique=True)
     reviews = db.relationship("Review", backref="owner", lazy=True)
+
+    def save(self):
+        db.session.add(self)
+
+    def check(self):
+        return db.session.query(Item).filter_by(asin=self.asin).scalar()
 
 
 class Review(db.Model):
@@ -20,3 +22,30 @@ class Review(db.Model):
     asin = db.Column(db.String(10))
     review = db.Column(db.String)
     item_id = db.Column(db.Integer, db.ForeignKey("items.id"))
+
+    def save(self):
+        db.session.add(self)
+
+    def check(self):
+        return (
+            db.session.query(Review)
+            .filter_by(asin=self.asin)
+            .filter_by(review=self.review)
+            .scalar()
+        )
+
+
+def save_to_db():
+    try:
+        db.session.commit()
+    except Exception as e:
+        print(f"An Error Occurred While Saving to DB: {e}")
+        db.session.rollback()
+        raise
+    finally:
+        db.session.close()
+
+
+def db_error(warning, e):
+    print(f"An Error Occured While Saving {warning} to DB: {e}")
+    db.session.rollback()
