@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import ssl
+# import ssl
 import json
+
 import models
 from soup_searcher import find_attribute
 import cleanup
@@ -83,7 +84,6 @@ def scrape(soup, asin):
             scraped_item.save()
         else:
             scraped_item = item_exists
-
     except Exception as e:
         models.db_error("Item", e)
         raise
@@ -105,5 +105,5 @@ def scrape(soup, asin):
             models.db_error("Review", e)
             raise
         product_json["long-reviews"].append(long_review)
-        models.save_to_db()
+    models.save_to_db()
     return

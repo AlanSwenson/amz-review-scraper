@@ -1,8 +1,11 @@
+import os
+
 import pytest
-from amz_review_scraper.soup_searcher import find_attribute
 import codecs
 import bs4
-import os
+
+from amz_review_scraper.soup_searcher import find_attribute
+
 
 my_path = os.path.abspath(os.path.dirname(__file__))
 path = os.path.join(my_path, "materials/sample_output_file.html")
