@@ -10,10 +10,15 @@ This scrapes Amazon recent reviews for specified products on and stores them in 
 
 This project uses [pipenv](https://github.com/pypa/pipenv) for virtual environments
 
+Navigate to the directory you want to install the project
+
 ```bash
+git clone <project clone url>
 pip install pipenv
-pipenv sync
+cd amz-review-scraper
 pipenv shell
+pipenv sync
+
 ```
 ## How do you use me?
 

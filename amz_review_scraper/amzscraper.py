@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# import ssl
 import json
 
 import models
@@ -31,24 +30,13 @@ def scrape(soup, asin):
 
     review_count = cleanup.review_count_cleanup(product_json["customer-reviews-count"])
 
-    # This block of code will help extract the average star rating of the product
+    product_json["star-rating"] = find_attribute(
+        soup, None, "i", attrs={"data-hook": "average-star-rating"}
+    )
 
-    for i_tags in soup.findAll("i", attrs={"data-hook": "average-star-rating"}):
-        for spans in i_tags.findAll("span", attrs={"class": "a-icon-alt"}):
-            product_json["star-rating"] = spans.text.strip()
-            break
-
-    # This block of code will help extract top specifications and details of the product
-
-    product_json["details"] = []
-    for ul_tags in soup.findAll(
-        "ul", attrs={"class": "a-unordered-list a-vertical a-spacing-none"}
-    ):
-        for li_tags in ul_tags.findAll("li"):
-            for spans in li_tags.findAll(
-                "span", attrs={"class": "a-list-item"}, text=True, recursive=False
-            ):
-                product_json["details"].append(spans.text.strip())
+    product_json["details"] = find_attribute(
+        soup, None, "div", attrs={"id": "feature-bullets"}
+    )
 
     # This block of code will help extract the short reviews of the product
 
@@ -64,9 +52,9 @@ def scrape(soup, asin):
         product_json["short-reviews"].append(short_review)
 
     # Saving the scraped html file
-    # pretty_html = soup.prettify('utf-8')
-    # with open('output_file.html', 'wb') as file:
-    #    file.write(pretty_html)
+    pretty_html = soup.prettify("utf-8")
+    with open("output_file.html", "wb") as file:
+        file.write(pretty_html)
 
     # Saving the scraped data in json format
 
