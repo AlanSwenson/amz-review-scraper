@@ -5,6 +5,7 @@ import json
 import models
 from soup_searcher import find_attribute
 import cleanup
+from config import html_output_file_switch, json_output_file_switch
 
 
 def scrape(soup, asin):
@@ -38,29 +39,14 @@ def scrape(soup, asin):
         soup, None, "div", attrs={"id": "feature-bullets"}
     )
 
-    # This block of code will help extract the short reviews of the product
-
-    product_json["short-reviews"] = []
-    for a_tags in soup.findAll(
+    product_json["short-reviews"] = find_attribute(
+        soup,
+        None,
         "a",
         attrs={
             "class": "a-size-base a-link-normal review-title a-color-base a-text-bold"
         },
-    ):
-        short_review = a_tags.text.strip()
-
-        product_json["short-reviews"].append(short_review)
-
-    # Saving the scraped html file
-    pretty_html = soup.prettify("utf-8")
-    with open("output_file.html", "wb") as file:
-        file.write(pretty_html)
-
-    # Saving the scraped data in json format
-
-    with open("product.json", "w") as outfile:
-        json.dump(product_json, outfile, indent=4)
-        print("----------Extraction of data is complete. Check json file.----------")
+    )
 
     try:
         scraped_item = models.Item(
@@ -94,4 +80,19 @@ def scrape(soup, asin):
             raise
         product_json["long-reviews"].append(long_review)
     models.save_to_db()
+
+    # Saving the scraped html file
+    if html_output_file_switch == "y":
+        pretty_html = soup.prettify("utf-8")
+        with open("output_file.html", "wb") as file:
+            file.write(pretty_html)
+
+    # Saving the scraped data in json format
+    if json_output_file_switch == "y":
+        with open("product.json", "w") as outfile:
+            json.dump(product_json, outfile, indent=4)
+            print(
+                "----------Extraction of data is complete. Check json file.----------"
+            )
+
     return

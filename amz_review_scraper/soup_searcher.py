@@ -1,13 +1,24 @@
 product_json = {}
 product_json["details"] = []
+product_json["short-reviews"] = []
 
 
 def find_attribute(soup, key, html_tag, attrs, *args, **kwargs):
     for tag in soup.findAll(html_tag, attrs=attrs, **kwargs):
+
         attribute = inner_attribute(tag, key, attrs=attrs, *args, **kwargs)
+        if attrs == {
+            "class": "a-size-base a-link-normal review-title a-color-base a-text-bold"
+        }:
+            tag = tag.text.strip()
+            product_json["short-reviews"].append(tag)
+            continue
+
         if attribute is not None:
             return attribute
-    return "None"
+    if product_json["short-reviews"] is not None:
+        return product_json["short-reviews"]
+    return None
 
 
 def inner_attribute(tag, key, attrs, *args, **kwargs):
@@ -17,6 +28,8 @@ def inner_attribute(tag, key, attrs, *args, **kwargs):
         or attrs == {"id": "acrCustomerReviewText"}
         or attrs == {"class": "a-icon-alt"}
         or attrs == {"class": "a-list-item"}
+        or attrs
+        == {"class": "a-size-base a-link-normal review-title a-color-base a-text-bold"}
     ):
         return tag.text.strip()
 
@@ -52,6 +65,17 @@ def inner_attribute(tag, key, attrs, *args, **kwargs):
             temp_value = temp_value.replace("\n", " ")
             product_json["details"].append(temp_value)
         return product_json["details"]
+
+    # Short-Reviews
+    # elif attrs == {
+    #    "class": "a-size-base a-link-normal review-title a-color-base a-text-bold"
+    # }:
+    # temp_value = tag.replace("\n", " ")
+    #    tag = tag.text.strip()
+    #    product_json["short-reviews"].append(tag)
+
+    #    print(product_json["short-reviews"])
+    #    return product_json["short-reviews"]
 
     # Brand
     else:

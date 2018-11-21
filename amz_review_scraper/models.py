@@ -49,3 +49,8 @@ def save_to_db():
 def db_error(warning, e):
     print(f"An Error Occured While Saving {warning} to DB: {e}")
     db.session.rollback()
+
+
+# Initialize the DB
+def create_db():
+    db.create_all()

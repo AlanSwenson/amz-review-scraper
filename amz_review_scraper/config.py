@@ -31,6 +31,9 @@ DB_URL = "postgresql://{user}:{pw}@{url}/{db}".format(
     user=POSTGRES_USER, pw=POSTGRES_PW, url=POSTGRES_URL, db=POSTGRES_DB
 )
 
+html_output_file_switch = "n"
+json_output_file_switch = "n"
+
 
 class Config(object):
     # ...
