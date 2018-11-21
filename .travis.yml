@@ -10,7 +10,7 @@ install:
 # to start the test
 script:
   - python -m pytest
-  - pytest --cov
+  - pytest --cov=amz_review_scraper
   - black --check --verbose
 branches:
   only:
