@@ -1,5 +1,4 @@
 product_json = {}
-product_json["details"] = []
 
 
 def find_attribute(soup, key, html_tag, attrs, *args, **kwargs):
@@ -56,6 +55,7 @@ def inner_attribute(tag, key, attrs, *args, **kwargs):
 
     # Detail Bullets Second Inner Function
     elif attrs == {"class": "a-unordered-list a-vertical a-spacing-none"}:
+        product_json["details"] = []
         for li_tag in tag.findAll("li", id=False):
             temp_value = find_attribute(
                 li_tag,

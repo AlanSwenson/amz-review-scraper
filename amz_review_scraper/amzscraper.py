@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 import json
 
-import models
+import model_functions
+import models.item as item
+import models.review as review
 from soup_searcher import find_attribute
 import cleanup
 from config import html_output_file_switch, json_output_file_switch
@@ -49,7 +51,7 @@ def scrape(soup, asin):
     )
 
     try:
-        scraped_item = models.Item(
+        scraped_item = item.Item(
             name=product_json["name"], customer_reviews_count=review_count, asin=asin
         )
         # TODO: think of a better name than item_exists
@@ -59,7 +61,7 @@ def scrape(soup, asin):
         else:
             scraped_item = item_exists
     except Exception as e:
-        models.db_error("Item", e)
+        model_functions.db_error("Item", e)
         raise
 
     # This block of code will help extract the long reviews of the product
@@ -67,7 +69,7 @@ def scrape(soup, asin):
     for divs in soup.findAll("div", attrs={"data-hook": "review-collapsed"}):
         long_review = divs.text.strip()
         try:
-            scraped_review = models.Review(
+            scraped_review = review.Review(
                 review=long_review, asin=asin, owner=scraped_item
             )
             review_exists = scraped_review.check()
@@ -76,10 +78,10 @@ def scrape(soup, asin):
             else:
                 pass
         except Exception as e:
-            models.db_error("Review", e)
+            model_functions.db_error("Review", e)
             raise
         product_json["long-reviews"].append(long_review)
-    models.save_to_db()
+    model_functions.save_to_db()
 
     # Saving the scraped html file
     if html_output_file_switch == "y":
