@@ -18,3 +18,4 @@ branches:
   - /.*/
 after_success:
   - coveralls
+  - coveralls report --fail-under=80
