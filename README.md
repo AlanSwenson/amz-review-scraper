@@ -20,12 +20,22 @@ pipenv shell
 pipenv sync
 
 ```
+
+
 ## How do you use me?
 
-
-### To run the app use:
+#### First Initialize a brand new Postgres DB:
+This project uses Postgres as it's database of choice.
+To initialize the database use:
 ```bash
-python app.py
+python amz_review_scraper/model_functions.py
+```
+This will create the DB from scratch to use when you run the app.
+#### To run the app use:
+
+
+```bash
+python amz_review_scraper/main.py
 ```
 
 Input an ASIN and the corresponding Amazon listing will be scraped and its Review Data added to Postgres DB

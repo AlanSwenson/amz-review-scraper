@@ -18,5 +18,13 @@ def db_error(warning, e):
 
 
 # Initialize the DB
-def create_db():
+if __name__ == "__main__":
+    from app import create_app, db
+
+    app = create_app()
+    app.app_context().push()
+
+    from models.item import Item
+    from models.review import Review
+
     db.create_all()
