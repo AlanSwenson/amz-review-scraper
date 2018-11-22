@@ -6,7 +6,6 @@ import bs4
 
 from amz_review_scraper.soup_searcher import find_attribute
 
-
 my_path = os.path.abspath(os.path.dirname(__file__))
 path = os.path.join(my_path, "materials/sample_output_file.html")
 
@@ -48,6 +47,9 @@ def test_find_attribute():
             "class": "a-size-base a-link-normal review-title a-color-base a-text-bold"
         },
     )
+    product_json["tag-that-doesnt-exist"] = find_attribute(
+        soup, "tag-that-doesnt-exist", "tag-that-doesnt-exist", attrs={}
+    )
 
     assert product_json["brand"] == "Sony"
     assert product_json["price"] == "$1298.00"
@@ -74,3 +76,4 @@ def test_find_attribute():
         "Beats Zeiss 24-70",
         "Five Stars",
     ]
+    assert product_json["tag-that-doesnt-exist"] == None

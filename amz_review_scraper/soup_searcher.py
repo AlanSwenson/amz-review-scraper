@@ -1,9 +1,10 @@
 product_json = {}
 product_json["details"] = []
-product_json["short-reviews"] = []
 
 
 def find_attribute(soup, key, html_tag, attrs, *args, **kwargs):
+
+    product_json["short-reviews"] = []
     for tag in soup.findAll(html_tag, attrs=attrs, **kwargs):
 
         attribute = inner_attribute(tag, key, attrs=attrs, *args, **kwargs)
@@ -16,7 +17,10 @@ def find_attribute(soup, key, html_tag, attrs, *args, **kwargs):
 
         if attribute is not None:
             return attribute
-    if product_json["short-reviews"] is not None:
+    if (
+        product_json["short-reviews"] is not None
+        and product_json["short-reviews"] != []
+    ):
         return product_json["short-reviews"]
     return None
 
