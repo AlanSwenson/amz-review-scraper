@@ -1,6 +1,6 @@
 Review Scraper for Amazon
 ===
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black) [![Build Status](https://travis-ci.org/AlanSwenson/amz-review-scraper.svg?branch=master)](https://travis-ci.org/AlanSwenson/amz-review-scraper)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black) [![Build Status](https://travis-ci.org/AlanSwenson/amz-review-scraper.svg?branch=master)](https://travis-ci.org/AlanSwenson/amz-review-scraper) [![Coverage Status](https://coveralls.io/repos/github/AlanSwenson/amz-review-scraper/badge.svg)](https://coveralls.io/github/AlanSwenson/amz-review-scraper)
 
 ## What do I do?
 
