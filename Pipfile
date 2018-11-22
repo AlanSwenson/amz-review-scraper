@@ -6,16 +6,15 @@ name = "pypi"
 [packages]
 "bs4" = "*"
 flask-sqlalchemy = "*"
-"psycopg2" = "*"
 requests = "*"
 lxml = "*"
-"psycopg2-binary" = "*"
 flask-migrate = "*"
 black = "*"
 mock = "*"
 pytest = "*"
 pytest-cov = "*"
 coveralls = "*"
+"psycopg2-binary" = "*"
 
 [dev-packages]
 
