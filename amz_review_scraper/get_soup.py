@@ -4,7 +4,7 @@ import requests
 import bs4
 import lxml
 
-from config import proxies, HEADER
+from amz_review_scraper.config import proxies, HEADER
 
 
 def boil_soup(url, asin):

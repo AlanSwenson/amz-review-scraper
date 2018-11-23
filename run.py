@@ -1,11 +1,11 @@
 import sys
 
-import amzscraper as amazon
-import urls
-import asin_validation
-import get_soup
+import amz_review_scraper.amzscraper as amazon
+import amz_review_scraper.urls as urls
+import amz_review_scraper.asin_validation as asin_validation
+import amz_review_scraper.get_soup as get_soup
 
-from app import create_app, db
+from amz_review_scraper import create_app, db
 
 
 app = create_app()

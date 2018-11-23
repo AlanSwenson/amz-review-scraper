@@ -1,4 +1,4 @@
-from app import db
+from amz_review_scraper import db
 from datetime import datetime
 
 
