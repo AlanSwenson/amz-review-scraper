@@ -31,6 +31,7 @@ DB_URL = "postgresql://{user}:{pw}@{url}/{db}".format(
     user=POSTGRES_USER, pw=POSTGRES_PW, url=POSTGRES_URL, db=POSTGRES_DB
 )
 
+# "y" switches output files on, either html of json or both
 html_output_file_switch = "n"
 json_output_file_switch = "n"
 
