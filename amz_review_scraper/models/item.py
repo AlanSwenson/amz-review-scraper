@@ -16,3 +16,8 @@ class Item(db.Model):
 
     def check(self):
         return db.session.query(Item).filter_by(asin=self.asin).scalar()
+
+    def update_last_scraped(self):
+        db.session.query(Item).filter_by(asin=self.asin).update(
+            {"last_scraped": datetime.utcnow()}
+        )

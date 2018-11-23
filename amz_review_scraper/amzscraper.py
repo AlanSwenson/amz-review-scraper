@@ -59,7 +59,9 @@ def scrape(soup, asin):
         if item_exists == None:
             scraped_item.save()
         else:
-            scraped_item = item_exists
+            scraped_item.update_last_scraped()
+            # scraped_item = item_exists
+
     except Exception as e:
         model_functions.db_error("Item", e)
         raise
