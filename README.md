@@ -1,6 +1,6 @@
 Review Scraper for Amazon
 ===
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black) [![Build Status](https://travis-ci.org/AlanSwenson/amz-review-scraper.svg?branch=master)](https://travis-ci.org/AlanSwenson/amz-review-scraper)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black) [![Build Status](https://travis-ci.org/AlanSwenson/amz-review-scraper.svg?branch=master)](https://travis-ci.org/AlanSwenson/amz-review-scraper) [![Coverage Status](https://coveralls.io/repos/github/AlanSwenson/amz-review-scraper/badge.svg)](https://coveralls.io/github/AlanSwenson/amz-review-scraper)
 
 ## What do I do?
 
@@ -10,17 +10,32 @@ This scrapes Amazon recent reviews for specified products on and stores them in 
 
 This project uses [pipenv](https://github.com/pypa/pipenv) for virtual environments
 
+Navigate to the directory you want to install the project
+
 ```bash
+git clone <project clone url>
 pip install pipenv
-pipenv sync
+cd amz-review-scraper
 pipenv shell
+pipenv sync
+
 ```
+
+
 ## How do you use me?
 
-
-### To run the app use:
+#### First Initialize a brand new Postgres DB:
+This project uses Postgres as it's database of choice.
+To initialize the database use:
 ```bash
-python app.py
+python amz_review_scraper/model_functions.py
+```
+This will create the DB from scratch to use when you run the app.
+#### To run the app use:
+
+
+```bash
+python amz_review_scraper/main.py
 ```
 
 Input an ASIN and the corresponding Amazon listing will be scraped and its Review Data added to Postgres DB

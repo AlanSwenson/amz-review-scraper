@@ -1,4 +1,5 @@
 .env
 .DS_Store
+.coverage
 output_file.html
 product.json

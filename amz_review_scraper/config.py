@@ -15,8 +15,6 @@ POSTGRES_USER = get_env_variable("POSTGRES_USER")
 POSTGRES_PW = get_env_variable("POSTGRES_PW")
 POSTGRES_DB = get_env_variable("POSTGRES_DB")
 
-
-# This is pulling in a dict and making it a string
 # proxies
 http = get_env_variable("http")
 https = get_env_variable("https")
@@ -30,6 +28,10 @@ HEADER = {
 DB_URL = "postgresql://{user}:{pw}@{url}/{db}".format(
     user=POSTGRES_USER, pw=POSTGRES_PW, url=POSTGRES_URL, db=POSTGRES_DB
 )
+
+# "y" switches output files on, either html of json or both
+html_output_file_switch = "n"
+json_output_file_switch = "n"
 
 
 class Config(object):
