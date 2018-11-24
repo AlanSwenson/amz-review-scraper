@@ -1,6 +1,6 @@
 # from flask import current_app
 
-from app import db
+from amz_review_scraper import db
 
 
 class Review(db.Model):
