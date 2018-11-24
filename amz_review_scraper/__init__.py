@@ -21,12 +21,14 @@ def create_app(config_class=Config):
 
     @app.route("/")
     def root():
-        return redirect(url_for("search.index"))
+        return redirect(url_for("track.index"))
 
     return app
 
 
 def register_blueprints(app):
-    from amz_review_scraper.search.views import search_blueprint
+    from amz_review_scraper.track.views import track_blueprint
+    from amz_review_scraper.results.views import results_blueprint
 
-    app.register_blueprint(search_blueprint, url_prefix="/search")
+    app.register_blueprint(track_blueprint, url_prefix="/track")
+    app.register_blueprint(results_blueprint, url_prefix="/results")

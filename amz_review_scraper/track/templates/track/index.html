@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+
+
+{% block main_section %}
+    <div class="container">
+        <div class="content-section">
+            <div class="mb-4">
+            Track product reviews on Amazon by entering the ASIN below:
+            </div>
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group mx-auto">
+                        <div class="row">
+                            <div class="form-group col-xs-3">
+                                {{ form.asin(class="form-control form-control-lg", placeholder="Enter ASIN") }}
+                            </div>
+                        </div>
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <ul class=flashes>
+                                    {% for message in messages %}
+                                        <li>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endwith %}
+                        <div class="row">
+                            <div class="form-group col-xs-3">
+                            {{ form.submit(class="btn btn-primary mb-2", value="Track") }}
+                            </div>
+                        </div>
+                </fieldset>
+
+            </form>
+        </div>
+    </div>
+ {% endblock %}

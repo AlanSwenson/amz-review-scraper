@@ -21,3 +21,7 @@ class Item(db.Model):
         db.session.query(Item).filter_by(asin=self.asin).update(
             {"last_scraped": datetime.utcnow()}
         )
+
+
+def get_results():
+    return Item.query.all()

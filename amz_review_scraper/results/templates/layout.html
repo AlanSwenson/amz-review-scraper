@@ -9,20 +9,21 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+
 
 
     <!-- Bootstrap core CSS-->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('search.static', filename='vendor/bootstrap/css/bootstrap.min.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}"/>
 
     <!-- Custom fonts for this template-->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('search.static', filename='vendor/fontawesome-free/css/all.min.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/fontawesome-free/css/all.min.css') }}"/>
 
     <!-- Page level plugin CSS-->
-    <link rel="stylesheet" href="{{ url_for('search.static', filename='vendor/datatables/dataTables.bootstrap4.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/datatables/dataTables.bootstrap4.css') }}"/>
 
     <!-- Custom styles for this template-->
-    <link rel="stylesheet" href="{{ url_for('search.static', filename='css/sb-admin.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sb-admin.css') }}"/>
 
 
   </head>
@@ -137,13 +138,12 @@
             <li class="breadcrumb-item">
               <a href="#">Dashboard</a>
             </li>
-            <li class="breadcrumb-item active">Blank Page</li>
+            <li class="breadcrumb-item active">{{ title }}</li>
           </ol>
 
           <!-- Page Content -->
-          <h1>Blank Page</h1>
+          <h1>{{ title }}</h1>
           <hr>
-          <p>This is a great starting point for new custom pages.</p>
           {% block main_section %}
           {% endblock %}
 
@@ -190,17 +190,17 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="{{ url_for('search.static', filename='vendor/jquery/jquery.min.js') }}"/></script>
+    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"/></script>
 
-    <script src="{{ url_for('search.static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"/></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"/></script>
 
     <!-- Core plugin JavaScript-->
 
-    <script src="{{ url_for('search.static', filename='vendor/jquery-easing/jquery.easing.min.js') }}"/></script>
+    <script src="{{ url_for('static', filename='vendor/jquery-easing/jquery.easing.min.js') }}"/></script>
 
     <!-- Custom scripts for all pages-->
 
-    <script src="{{ url_for('search.static', filename='js/sb-admin.min.js') }}"/></script>
+    <script src="{{ url_for('static', filename='js/sb-admin.min.js') }}"/></script>
 
 
   </body>

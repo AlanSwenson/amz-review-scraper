@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block main_section %}
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-table"></i>
+    Items in DB</div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ASIN</th>
+                <th>Name</th>
+                <th>review Count</th>
+
+            </tr>
+        </thead>
+        {% for item in res %}
+            <tr>
+                <th>{{item.asin}}</th>
+                <th>{{item.name}}</th>
+                <th>{{item.customer_reviews_count}}</th>
+            </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
