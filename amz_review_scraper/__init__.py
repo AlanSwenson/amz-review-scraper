@@ -8,11 +8,11 @@ db = SQLAlchemy()
 migrate = Migrate()
 
 
-def create_app():
+def create_app(config_class=Config):
     app = Flask(__name__)
-    app.config.from_object(Config)
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    migrate = Migrate(app, db)
+    app.config.from_object(config_class)
+
+    migrate = Migrate()
 
     with app.app_context():
         db.init_app(app)
@@ -21,7 +21,7 @@ def create_app():
 
     @app.route("/")
     def root():
-        return redirect(url_for("index"))
+        return redirect(url_for("search.index"))
 
     return app
 

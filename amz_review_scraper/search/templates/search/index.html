@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %} Search ASIN {% endblock %}
+{% block main_section %}
+    <div class="container">
+        <div class="content-section">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group mx-auto">
+                    <legend class="border-bottom xs-4">ASIN Search</legend>
+                        <div class="row">
+                            <div class="form-group col-xs-3">
+                                {{ form.asin.label(class="form-control-label") }}
+                                {{ form.asin(class="form-control form-control-lg") }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-3">
+                            {{ form.submit(class="btn btn-primary mb-2") }}
+                            </div>
+                        </div>
+                </fieldset>
+
+            </form>
+        </div>
+    </div>
+ {% endblock %}
