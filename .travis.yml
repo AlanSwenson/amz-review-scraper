@@ -10,8 +10,11 @@ install:
 # to start the test
 script:
   - python -m pytest
+  - pytest --cov=amz_review_scraper
   - black --check --verbose
 branches:
   only:
   - gh-pages
   - /.*/
+after_success:
+  - coveralls

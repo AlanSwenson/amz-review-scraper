@@ -1,17 +1,15 @@
-from flask import Flask
-from config import Config
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 import sys
+
 import amzscraper as amazon
 import urls
 import asin_validation
 import get_soup
 
-app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+from app import create_app, db
+
+
+app = create_app()
+app.app_context().push()
 
 
 def main():
