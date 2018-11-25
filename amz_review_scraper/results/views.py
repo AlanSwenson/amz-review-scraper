@@ -1,5 +1,6 @@
 from flask import redirect, render_template, url_for, Blueprint, flash
 
+import amz_review_scraper.models.item as item
 
 results_blueprint = Blueprint(
     "results",
@@ -12,4 +13,5 @@ results_blueprint = Blueprint(
 
 @results_blueprint.route("/")
 def index():
-    return render_template("results/index.html", title="Results")
+    res = item.get_results()
+    return render_template("results/index.html", title="Results", res=res)
