@@ -17,6 +17,7 @@ coveralls = "*"
 "psycopg2-binary" = "*"
 flask-wtf = "*"
 flask = "*"
+"flask-s3" = "*"
 
 [dev-packages]
 

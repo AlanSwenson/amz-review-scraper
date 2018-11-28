@@ -29,7 +29,8 @@ DB_URL = "postgresql://{user}:{pw}@{url}/{db}".format(
     user=POSTGRES_USER, pw=POSTGRES_PW, url=POSTGRES_URL, db=POSTGRES_DB
 )
 
-SECRET_KEY = get_env_variable("FLASK_SECRET_KEY")
+FLASK_SECRET_KEY = get_env_variable("FLASK_SECRET_KEY")
+S3_NAME = get_env_variable("FLASKS3_BUCKET_NAME")
 
 # "y" switches output files on, either html of json or both
 html_output_file_switch = "n"
@@ -40,4 +41,5 @@ class Config(object):
     # ...
     SQLALCHEMY_DATABASE_URI = DB_URL
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = "any secret string"
+    SECRET_KEY = FLASK_SECRET_KEY
+    FLASKS3_BUCKET_NAME = S3_NAME
