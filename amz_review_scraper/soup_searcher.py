@@ -1,13 +1,12 @@
 product_json = {}
 
 
-def find_attribute(soup, key, html_tag, *args, **kwargs):
+def find_attribute(soup, key, html_tag, attrs, *args, **kwargs):
 
     product_json["short-reviews"] = []
-    for tag in soup.findAll(html_tag, **kwargs):
-        attrs = kwargs["attrs"]
-        attribute = inner_attribute(tag, key, attrs, *args, **kwargs)
+    for tag in soup.findAll(html_tag, attrs=attrs, **kwargs):
 
+        attribute = inner_attribute(tag, key, attrs=attrs, *args, **kwargs)
         if attrs == {
             "class": "a-size-base a-link-normal review-title a-color-base a-text-bold"
         }:
@@ -25,9 +24,8 @@ def find_attribute(soup, key, html_tag, *args, **kwargs):
     return None
 
 
-def inner_attribute(tag, key, *args, **kwargs):
+def inner_attribute(tag, key, attrs, *args, **kwargs):
     # For the Title, or Reviews Count Inner function
-    attrs = kwargs["attrs"]
     if (
         attrs == {"id": "productTitle"}
         or attrs == {"id": "acrCustomerReviewText"}

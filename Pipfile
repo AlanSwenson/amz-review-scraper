@@ -18,6 +18,8 @@ coveralls = "*"
 flask-wtf = "*"
 flask = "*"
 "flask-s3" = "*"
+zappa = "*"
+awscli = "*"
 
 [dev-packages]
 

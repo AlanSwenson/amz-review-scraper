@@ -9,11 +9,25 @@ def get_env_variable(name):
         raise Exception(message)
 
 
+def create_db_url(user, pw, url, db):
+    return f"postgresql://{user}:{pw}@{url}/{db}"
+
+
+# Set environment :: "development" or "production"
+env_setting = "production"
+
+
 # import .env variables for DB connection
-POSTGRES_URL = get_env_variable("POSTGRES_URL")
-POSTGRES_USER = get_env_variable("POSTGRES_USER")
-POSTGRES_PW = get_env_variable("POSTGRES_PW")
-POSTGRES_DB = get_env_variable("POSTGRES_DB")
+if env_setting == "development":
+    POSTGRES_USER = get_env_variable("DEV_POSTGRES_USER")
+    POSTGRES_PW = get_env_variable("DEV_POSTGRES_PW")
+    POSTGRES_URL = get_env_variable("DEV_POSTGRES_URL")
+    POSTGRES_DB = get_env_variable("DEV_POSTGRES_DB")
+elif env_setting == "production":
+    POSTGRES_USER = get_env_variable("PROD_POSTGRES_USER")
+    POSTGRES_PW = get_env_variable("PROD_POSTGRES_PW")
+    POSTGRES_URL = get_env_variable("PROD_POSTGRES_URL")
+    POSTGRES_DB = get_env_variable("PROD_POSTGRES_DB")
 
 # proxies
 http = get_env_variable("http")
@@ -24,10 +38,9 @@ HEADER = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0"
 }
 
+# DB
+DB_URL = create_db_url(POSTGRES_USER, POSTGRES_PW, POSTGRES_URL, POSTGRES_DB)
 
-DB_URL = "postgresql://{user}:{pw}@{url}/{db}".format(
-    user=POSTGRES_USER, pw=POSTGRES_PW, url=POSTGRES_URL, db=POSTGRES_DB
-)
 
 FLASK_SECRET_KEY = get_env_variable("FLASK_SECRET_KEY")
 S3_NAME = get_env_variable("FLASKS3_BUCKET_NAME")

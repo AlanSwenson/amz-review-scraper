@@ -19,7 +19,9 @@ def scrape(soup, asin):
         soup, "data-brand", "div", attrs={"class": "a-box-group"}
     )
 
-    product_json["price"] = "$" + str(find_attribute(soup, "data-asin-price", "div"))
+    product_json["price"] = "$" + str(
+        find_attribute(soup, "data-asin-price", "div", attrs={})
+    )
 
     product_json["name"] = find_attribute(
         soup, None, "span", attrs={"id": "productTitle"}

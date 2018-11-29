@@ -7,6 +7,9 @@ import amz_review_scraper.get_soup as get_soup
 
 from amz_review_scraper import create_app, db
 
+app = create_app()
+app.app_context().push()
+
 
 def main():
 
@@ -35,6 +38,4 @@ def main():
 
 if __name__ == "__main__":
     # main()
-    app = create_app()
-    app.app_context().push()
     app.run(debug=True)
