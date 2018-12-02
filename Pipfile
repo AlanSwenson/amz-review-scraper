@@ -15,6 +15,11 @@ pytest = "*"
 pytest-cov = "*"
 coveralls = "*"
 "psycopg2-binary" = "*"
+flask-wtf = "*"
+flask = "*"
+"flask-s3" = "*"
+zappa = "*"
+awscli = "*"
 
 [dev-packages]
 

@@ -1,3 +1,4 @@
 [run]
 omit =
-    */test*
+    */amz-review-scraper/test/*
+    */amz-review-scraper/amz_review_scraper/static/*

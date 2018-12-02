@@ -3,3 +3,4 @@
 .coverage
 output_file.html
 product.json
+zappa_settings.json

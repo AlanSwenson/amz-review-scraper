@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 import json
 
-import model_functions
-import models.item as item
-import models.review as review
-from soup_searcher import find_attribute
-import cleanup
-from config import html_output_file_switch, json_output_file_switch
+import amz_review_scraper.model_functions as model_functions
+import amz_review_scraper.models.item as item
+import amz_review_scraper.models.review as review
+from amz_review_scraper.soup_searcher import find_attribute
+import amz_review_scraper.cleanup as cleanup
+from amz_review_scraper.config import html_output_file_switch, json_output_file_switch
 
 
 def scrape(soup, asin):
@@ -60,7 +60,6 @@ def scrape(soup, asin):
             scraped_item.save()
         else:
             scraped_item.update_last_scraped()
-            # scraped_item = item_exists
 
     except Exception as e:
         model_functions.db_error("Item", e)
