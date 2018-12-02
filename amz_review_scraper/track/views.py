@@ -9,8 +9,8 @@ import amz_review_scraper.amzscraper as amazon
 track_blueprint = Blueprint(
     "track",
     __name__,
-    static_url_path="/static",
-    static_folder="./static",
+    static_url_path="static",
+    static_folder="static",
     template_folder="templates",
 )
 

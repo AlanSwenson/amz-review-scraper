@@ -41,9 +41,13 @@ HEADER = {
 # DB
 DB_URL = create_db_url(POSTGRES_USER, POSTGRES_PW, POSTGRES_URL, POSTGRES_DB)
 
-
+# Flask setup
 FLASK_SECRET_KEY = get_env_variable("FLASK_SECRET_KEY")
 S3_NAME = get_env_variable("FLASKS3_BUCKET_NAME")
+
+# aws credentials
+AWS_KEY = get_env_variable("AWS_ACCESS_KEY_ID")
+AWS_SECRET = get_env_variable("AWS_SECRET_ACCESS_KEY")
 
 # "y" switches output files on, either html of json or both
 html_output_file_switch = "n"
@@ -56,3 +60,6 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = FLASK_SECRET_KEY
     FLASKS3_BUCKET_NAME = S3_NAME
+    AWS_ACCESS_KEY_ID = AWS_KEY
+    AWS_SECRET_ACCESS_KEY = AWS_SECRET
+    # FLASKS3_DEBUG = True

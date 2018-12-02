@@ -2,16 +2,18 @@ from flask import Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
+from flask_s3 import FlaskS3
 
 from amz_review_scraper.config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
 csrf = CSRFProtect()
+s3 = FlaskS3()
 
 
 def create_app(config_class=Config):
-    app = Flask(__name__)
+    app = Flask(__name__, static_url_path="/static")
     app.config.from_object(config_class)
 
     migrate = Migrate()
@@ -20,6 +22,7 @@ def create_app(config_class=Config):
         db.init_app(app)
         migrate.init_app(app, db)
         csrf.init_app(app)
+        s3.init_app(app)
         register_blueprints(app)
 
     @app.route("/", methods=["POST", "GET"])
