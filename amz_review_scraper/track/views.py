@@ -19,7 +19,7 @@ track_blueprint = Blueprint(
 def index():
     form = Asin_search_form()
     if form.validate_on_submit():
-        asin = form.asin.data.strip().upper()
+        asin = form.asin.data
         url = urls.create_url(asin)
         soup = get_soup.boil_soup(url, asin)
         if soup.status_code != None:

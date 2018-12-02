@@ -4,6 +4,7 @@ from wtforms.validators import DataRequired, Length, ValidationError
 
 
 def asin_validation_check(form, field):
+    field.data = field.data.strip().upper()
     if len(field.data) != 10:
         raise ValidationError("Invalid ASIN")
 
