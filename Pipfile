@@ -13,14 +13,14 @@ flask-migrate = "*"
 flask-wtf = "*"
 flask = "*"
 "flask-s3" = "*"
+pytest-cov = "*"
+coveralls = "*"
+black = "*"
 
 
 [dev-packages]
-black = "*"
 mock = "*"
 pytest = "*"
-pytest-cov = "*"
-coveralls = "*"
 awscli = "*"
 zappa = "*"
 
