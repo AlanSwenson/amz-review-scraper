@@ -19,7 +19,7 @@ def db_error(warning, e):
 
 # Initialize the DB
 if __name__ == "__main__":
-    from app import create_app, db
+    from amz_review_scraper import create_app, db
 
     app = create_app()
     app.app_context().push()
