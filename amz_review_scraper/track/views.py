@@ -19,8 +19,9 @@ track_blueprint = Blueprint(
 def index():
     form = Asin_search_form()
     if form.validate_on_submit():
-        url = urls.create_url(form.asin.data)
-        soup = get_soup.boil_soup(url, form.asin.data)
+        asin = form.asin.data
+        url = urls.create_url(asin)
+        soup = get_soup.boil_soup(url, asin)
         if soup.status_code != None:
             flash(
                 "ASIN returned Status Code: "
@@ -28,7 +29,7 @@ def index():
                 + " Please check your ASIN and try Again"
             )
         else:
-            amazon.scrape(soup, form.asin.data)
+            amazon.scrape(soup, asin)
 
             return redirect(url_for("results.index"))
     return render_template("track/index.html", title="Track", form=form)

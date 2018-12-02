@@ -9,19 +9,20 @@ flask-sqlalchemy = "*"
 requests = "*"
 lxml = "*"
 flask-migrate = "*"
-black = "*"
-mock = "*"
-pytest = "*"
-pytest-cov = "*"
-coveralls = "*"
 "psycopg2-binary" = "*"
 flask-wtf = "*"
 flask = "*"
 "flask-s3" = "*"
-zappa = "*"
-awscli = "*"
+pytest-cov = "*"
+coveralls = "*"
+black = "*"
+
 
 [dev-packages]
+mock = "*"
+pytest = "*"
+awscli = "*"
+zappa = "*"
 
 [requires]
 python_version = "3.6"
