@@ -1,5 +1,6 @@
 from flask import redirect, render_template, url_for, Blueprint, flash
 
+from amz_review_scraper.login.forms import Login_form
 
 login_blueprint = Blueprint(
     "login",
@@ -10,6 +11,7 @@ login_blueprint = Blueprint(
 )
 
 
-@login_blueprint.route("/")
+@login_blueprint.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("login/index.html", title="Login")
+    form = Login_form()
+    return render_template("login/index.html", title="Login", form=form)
