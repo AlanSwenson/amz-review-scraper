@@ -43,6 +43,8 @@ def create_app(config_class=Config):
 def register_blueprints(app):
     from amz_review_scraper.track.views import track_blueprint
     from amz_review_scraper.results.views import results_blueprint
+    from amz_review_scraper.login.views import login_blueprint
 
     app.register_blueprint(track_blueprint, url_prefix="/track")
     app.register_blueprint(results_blueprint, url_prefix="/results")
+    app.register_blueprint(login_blueprint, url_prefix="/login")
