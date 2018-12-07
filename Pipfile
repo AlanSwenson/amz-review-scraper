@@ -18,10 +18,11 @@ coveralls = "*"
 black = "*"
 flask-bcrypt = "*"
 flask-login = "*"
-
-[dev-packages]
 mock = "*"
 pytest = "*"
+
+[dev-packages]
+
 awscli = "*"
 zappa = "*"
 
