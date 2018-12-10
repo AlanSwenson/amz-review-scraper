@@ -22,8 +22,6 @@ def create_app(config_class=Config):
     app = Flask(__name__, static_url_path="/static")
     app.config.from_object(config_class)
 
-    migrate = Migrate()
-
     with app.app_context():
         db.init_app(app)
         migrate.init_app(app, db)
