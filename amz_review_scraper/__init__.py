@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from flask_s3 import FlaskS3
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 
 from amz_review_scraper.config import Config
 
@@ -14,7 +14,7 @@ csrf = CSRFProtect()
 s3 = FlaskS3()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
-# login_manager.login_view = "users.login"
+login_manager.login_view = "users.login"
 login_manager.login_message_category = "info"
 
 
@@ -33,7 +33,9 @@ def create_app(config_class=Config):
 
     @app.route("/", methods=["POST", "GET"])
     def root():
-        return redirect(url_for("track.index"))
+        if current_user.is_authenticated:
+            return redirect(url_for("track.index"))
+        return redirect(url_for("signup.index"))
 
     return app
 

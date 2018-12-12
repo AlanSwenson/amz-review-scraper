@@ -1,6 +1,9 @@
-from flask import redirect, render_template, url_for, Blueprint, flash
+from flask import redirect, render_template, url_for, Blueprint, flash, request
+from flask_login import login_user, current_user
 
-from amz_review_scraper.login.forms import Login_form
+from amz_review_scraper import bcrypt
+from amz_review_scraper.login.forms import LoginForm
+from amz_review_scraper.models.user import User
 
 login_blueprint = Blueprint(
     "login",
@@ -13,5 +16,19 @@ login_blueprint = Blueprint(
 
 @login_blueprint.route("/", methods=["GET", "POST"])
 def index():
-    form = Login_form()
+    if current_user.is_authenticated:
+        return redirect(url_for("track.index"))
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
+            next_page = request.args.get("next")
+            return (
+                redirect(next_page) if next_page else redirect(url_for("track.index"))
+            )
+        else:
+            flash("Login Unsuccessful. Please check email and password", "danger")
+
     return render_template("login/index.html", title="Login", form=form)

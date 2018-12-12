@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, Email, ValidationError
 from flask_login import current_user
 
 
-class Login_form(FlaskForm):
+class LoginForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
     password = PasswordField("Password", validators=[DataRequired()])
     remember = BooleanField("Remember Me")
