@@ -28,7 +28,7 @@ pipenv sync
 This project uses Postgres as it's database of choice.
 To initialize the database use:
 ```bash
-python amz_review_scraper/model_functions.py
+python create_db.py
 ```
 This will create the DB from scratch to use when you run the app.
 #### To run the app use:
