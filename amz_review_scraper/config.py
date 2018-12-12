@@ -14,7 +14,7 @@ def create_db_url(user, pw, url, db):
 
 
 # Set environment :: "development" or "production"
-env_setting = "development"
+env_setting = "production"
 
 
 # import .env variables for DB connection

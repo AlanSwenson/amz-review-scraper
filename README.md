@@ -1,6 +1,10 @@
 Review Scraper for Amazon
 ===
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black) [![Build Status](https://travis-ci.org/AlanSwenson/amz-review-scraper.svg?branch=master)](https://travis-ci.org/AlanSwenson/amz-review-scraper) [![Coverage Status](https://coveralls.io/repos/github/AlanSwenson/amz-review-scraper/badge.svg)](https://coveralls.io/github/AlanSwenson/amz-review-scraper)
+![Programming language: python](https://img.shields.io/badge/python-3.6-blue.svg) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black) [![Build Status](https://travis-ci.org/AlanSwenson/amz-review-scraper.svg?branch=master)](https://travis-ci.org/AlanSwenson/amz-review-scraper) [![Coverage Status](https://coveralls.io/repos/github/AlanSwenson/amz-review-scraper/badge.svg)](https://coveralls.io/github/AlanSwenson/amz-review-scraper)
+
+
+
+
 
 ## What do I do?
 
@@ -31,11 +35,16 @@ To initialize the database use:
 python create_db.py
 ```
 This will create the DB from scratch to use when you run the app.
+
+You can also initialize the DB using zappa directly from the lambda function using:
+```
+zappa invoke <stage name> "create_db.db_init"
+```
 #### To run the app use:
 
 
 ```bash
-python amz_review_scraper/main.py
+flask run
 ```
 
 Input an ASIN and the corresponding Amazon listing will be scraped and its Review Data added to Postgres DB
