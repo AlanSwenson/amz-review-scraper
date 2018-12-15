@@ -20,11 +20,12 @@ flask-bcrypt = "*"
 flask-login = "*"
 mock = "*"
 pytest = "*"
+zappa = "*"
 
 [dev-packages]
 
 awscli = "*"
-zappa = "*"
+
 
 [requires]
 python_version = "3.6"
