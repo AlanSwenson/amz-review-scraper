@@ -1,4 +1,5 @@
 from flask import redirect, render_template, url_for, Blueprint, flash
+from flask_login import login_required
 
 from amz_review_scraper.track.forms import Asin_search_form
 import amz_review_scraper.urls as urls
@@ -16,6 +17,7 @@ track_blueprint = Blueprint(
 
 
 @track_blueprint.route("/", methods=["POST", "GET"])
+@login_required
 def index():
     form = Asin_search_form()
     if form.validate_on_submit():

@@ -8,8 +8,8 @@
             <div class="mb-4">
             Track product reviews on Amazon by entering the ASIN below:
             </div>
-            <form method="POST" action="">
-                {{ form.hidden_tag() }}
+            <form method="POST" action="{{ url_for('track.index') }}">
+                {{ form.csrf_token }}
                 <fieldset class="form-group mx-auto">
                         <div class="row">
                             <div class="form-group col-xs-3">
