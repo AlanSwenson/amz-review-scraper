@@ -56,14 +56,16 @@ json_output_file_switch = "n"
 
 
 class Config(object):
-    # ...
+    # SQLAlchemy settings
     SQLALCHEMY_DATABASE_URI = DB_URL
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = FLASK_SECRET_KEY
+    # Flask-S3 settings
     FLASKS3_BUCKET_NAME = S3_NAME
     FLASKS3_CDN_DOMAIN = S3_CDN
     AWS_ACCESS_KEY_ID = AWS_KEY
     AWS_SECRET_ACCESS_KEY = AWS_SECRET
-    SESSION_COOKIE_SECURE = True
-    SESSION_COOKIE_HTTPONLY = True
+    # Flask Settings
+    SECRET_KEY = FLASK_SECRET_KEY
+    # SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = False
     # FLASKS3_DEBUG = True
