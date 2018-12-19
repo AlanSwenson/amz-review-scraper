@@ -3,7 +3,7 @@
 <div class="card mb-3">
   <div class="card-header">
     <i class="fas fa-table"></i>
-    Items in DB</div>
+    ASINs in DB</div>
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -17,7 +17,7 @@
         </thead>
         {% for item in res %}
             <tr>
-                <th>{{item.asin}}</th>
+                <th><a href="{{ url_for('ASIN.index', asin=item.asin)}}">{{ item.asin }}</a></th>
                 <th>{{item.name}}</th>
                 <th>{{item.customer_reviews_count}}</th>
             </tr>

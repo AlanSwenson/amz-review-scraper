@@ -20,3 +20,7 @@ class Review(db.Model):
             .filter_by(review=self.review)
             .scalar()
         )
+
+
+def get_results():
+    return Review.query.all()
