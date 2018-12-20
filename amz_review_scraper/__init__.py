@@ -23,12 +23,7 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     with app.app_context():
-        db.init_app(app)
-        migrate.init_app(app, db)
-        csrf.init_app(app)
-        s3.init_app(app)
-        bcrypt.init_app(app)
-        login_manager.init_app(app)
+        initialize_extensions(app)
         register_blueprints(app)
 
     @app.route("/", methods=["POST", "GET"])
@@ -43,6 +38,15 @@ def create_app(config_class=Config):
         return redirect(url_for("login.index"))
 
     return app
+
+
+def initialize_extensions(app):
+    db.init_app(app)
+    migrate.init_app(app, db)
+    csrf.init_app(app)
+    s3.init_app(app)
+    bcrypt.init_app(app)
+    login_manager.init_app(app)
 
 
 def register_blueprints(app):
