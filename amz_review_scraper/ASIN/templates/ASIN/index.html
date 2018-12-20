@@ -1,1 +1,31 @@
 {% extends "layout.html" %}
+{% block main_section %}
+<div class="card mb-3">
+  <div class="card-header">
+    <i class="fas fa-table"></i>
+    Reviews for <b>{{ product.name }}</b></div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Review</th>
+                <th>#</th>
+                <th>#</th>
+
+            </tr>
+        </thead>
+        {% for review in revs %}
+            <tr>
+                <th>{{ review.review }}</a></th>
+                <th>#</th>
+                <th>#</th>
+            </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

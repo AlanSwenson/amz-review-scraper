@@ -23,5 +23,9 @@ class Item(db.Model):
         )
 
 
+def get_name(asin):
+    return Item.query.filter_by(asin=asin).first()
+
+
 def get_results():
     return Item.query.all()
