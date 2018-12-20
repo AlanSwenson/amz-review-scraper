@@ -22,5 +22,7 @@ class Review(db.Model):
         )
 
 
-def get_results():
+def get_results(asin=None):
+    if asin is not None:
+        return Review.query.filter_by(asin=asin)
     return Review.query.all()
