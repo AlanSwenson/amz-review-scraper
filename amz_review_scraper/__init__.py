@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
@@ -36,6 +36,10 @@ def create_app(config_class=Config):
     def logout():
         logout_user()
         return redirect(url_for("login.index"))
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template("404.html")
 
     return app
 

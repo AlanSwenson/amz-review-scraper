@@ -16,6 +16,7 @@ ASIN_blueprint = Blueprint(
 @ASIN_blueprint.route("/<asin>", methods=["POST", "GET"])
 def index(asin):
     asin = asin.upper()
+    query = review.Review.query.filter_by(asin=asin).first_or_404()
     title = "Reviews for " + asin
     revs = review.get_results(asin)
     product = item.get_name(asin)
