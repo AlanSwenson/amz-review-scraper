@@ -19,5 +19,5 @@ def index(asin):
     query = review.Review.query.filter_by(asin=asin).first_or_404()
     title = "Reviews for " + asin
     revs = review.get_results(asin)
-    product = item.get_name(asin)
+    product = item.get_results(asin)
     return render_template("ASIN/index.html", title=title, revs=revs, product=product)

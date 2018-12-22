@@ -23,9 +23,8 @@ class Item(db.Model):
         )
 
 
-def get_name(asin):
-    return Item.query.filter_by(asin=asin).first()
-
-
-def get_results():
-    return Item.query.all()
+def get_results(asin=None):
+    if asin is not None:
+        return Item.query.filter_by(asin=asin).first()
+    else:
+        return Item.query.all()
