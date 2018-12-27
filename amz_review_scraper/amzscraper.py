@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import json
+from flask_login import current_user
 
 import amz_review_scraper.model_functions as model_functions
 import amz_review_scraper.models.item as item
@@ -51,9 +52,11 @@ def scrape(soup, asin):
     )
 
     try:
+        user = current_user
         scraped_item = item.Item(
             name=product_json["name"], customer_reviews_count=review_count, asin=asin
         )
+        user.items.append(scraped_item)
         # TODO: think of a better name than item_exists
         item_exists = scraped_item.check()
         if item_exists == None:
