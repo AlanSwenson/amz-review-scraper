@@ -16,16 +16,15 @@ flask = "*"
 pytest-cov = "*"
 coveralls = "*"
 black = "*"
-bcrypt = "*"
 "flask-bcrypt" = "*"
 flask-login = "*"
 mock = "*"
 pytest = "*"
-zappa = "*"
-
+bcrypt = "==3.1.4"
 
 [dev-packages]
 awscli = "*"
+zappa = "*"
 
 [requires]
 python_version = "3.6"
