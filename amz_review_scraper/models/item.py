@@ -1,6 +1,8 @@
 from amz_review_scraper import db
 from datetime import datetime
 
+from amz_review_scraper.models.users_items_association import users_items_association
+
 
 class Item(db.Model):
     __tablename__ = "items"
@@ -23,8 +25,12 @@ class Item(db.Model):
         )
 
 
-def get_results(asin=None):
+def get_results(asin=None, user_id=None):
     if asin is not None:
         return Item.query.filter_by(asin=asin).first()
+    elif user_id is not None:
+        return Item.query.join(
+            users_items_association, (users_items_association.c.user_id == user_id)
+        ).filter(users_items_association.c.item_id == Item.id)
     else:
         return Item.query.all()
