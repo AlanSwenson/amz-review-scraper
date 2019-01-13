@@ -6,7 +6,7 @@ from flask_s3 import FlaskS3
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, current_user, logout_user
 
-from amz_review_scraper.config import Config
+from amz_review_scraper.config import DevelopmentConfig
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -18,7 +18,7 @@ login_manager.login_view = "login.index"
 login_manager.login_message_category = "info"
 
 
-def create_app(config_class=Config):
+def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__, static_url_path="/static")
     app.config.from_object(config_class)
 

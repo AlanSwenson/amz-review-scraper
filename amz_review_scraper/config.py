@@ -13,33 +13,44 @@ def create_db_url(user, pw, url, db):
     return f"postgresql://{user}:{pw}@{url}/{db}"
 
 
-# Set environment :: "development" or "production"
-env_setting = "production"
-
-
 # import .env variables for DB connection
-if env_setting == "development":
-    POSTGRES_USER = get_env_variable("DEV_POSTGRES_USER")
-    POSTGRES_PW = get_env_variable("DEV_POSTGRES_PW")
-    POSTGRES_URL = get_env_variable("DEV_POSTGRES_URL")
-    POSTGRES_DB = get_env_variable("DEV_POSTGRES_DB")
-elif env_setting == "production":
-    POSTGRES_USER = get_env_variable("PROD_POSTGRES_USER")
-    POSTGRES_PW = get_env_variable("PROD_POSTGRES_PW")
-    POSTGRES_URL = get_env_variable("PROD_POSTGRES_URL")
-    POSTGRES_DB = get_env_variable("PROD_POSTGRES_DB")
+# TODO: this can probably be simplified more
+def get_env_db_url(env_setting):
+    if env_setting == "development":
+        POSTGRES_USER = get_env_variable("DEV_POSTGRES_USER")
+        POSTGRES_PW = get_env_variable("DEV_POSTGRES_PW")
+        POSTGRES_URL = get_env_variable("DEV_POSTGRES_URL")
+        POSTGRES_DB = get_env_variable("DEV_POSTGRES_DB")
+    elif env_setting == "testing":
+        POSTGRES_USER = get_env_variable("TESTING_POSTGRES_USER")
+        POSTGRES_PW = get_env_variable("TESTING_POSTGRES_PW")
+        POSTGRES_URL = get_env_variable("TESTING_POSTGRES_URL")
+        POSTGRES_DB = get_env_variable("TESTING_POSTGRES_DB")
+    elif env_setting == "production":
+        POSTGRES_USER = get_env_variable("PROD_POSTGRES_USER")
+        POSTGRES_PW = get_env_variable("PROD_POSTGRES_PW")
+        POSTGRES_URL = get_env_variable("PROD_POSTGRES_URL")
+        POSTGRES_DB = get_env_variable("PROD_POSTGRES_DB")
+
+    return create_db_url(POSTGRES_USER, POSTGRES_PW, POSTGRES_URL, POSTGRES_DB)
+
+
+# DB URLS for each Environment
+DEV_DB_URL = get_env_db_url("development")
+TESTING_DB_URL = get_env_db_url("testing")
+PROD_DB_URL = get_env_db_url("production")
+
 
 # proxies
 http = get_env_variable("http")
 https = get_env_variable("https")
 proxies = {"http": http, "https": https}
 
+# TODO: create a function that randomly selects through a list of headers
 HEADER = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0"
 }
 
-# DB
-DB_URL = create_db_url(POSTGRES_USER, POSTGRES_PW, POSTGRES_URL, POSTGRES_DB)
 
 # Flask setup
 FLASK_SECRET_KEY = get_env_variable("FLASK_SECRET_KEY")
@@ -57,7 +68,7 @@ json_output_file_switch = "n"
 
 class Config(object):
     # SQLAlchemy settings
-    SQLALCHEMY_DATABASE_URI = DB_URL
+    SQLALCHEMY_DATABASE_URI = DEV_DB_URL
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # Flask-S3 settings
     FLASKS3_BUCKET_NAME = S3_NAME
@@ -69,3 +80,21 @@ class Config(object):
     # SESSION_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = False
     # FLASKS3_DEBUG = True
+    DEBUG = False
+    TESTING = False
+
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+
+
+class TestingConfig(Config):
+    SQLALCHEMY_DATABASE_URI = TESTING_DB_URL
+    DEBUG = True
+    TESTING = True
+
+
+class ProductionConfig(Config):
+    SQLALCHEMY_DATABASE_URI = PROD_DB_URL
+    DEBUG = False
+    TESTING = False
