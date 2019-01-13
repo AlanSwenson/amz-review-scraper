@@ -1,21 +1,35 @@
-import mock
 import pytest
 
-from amz_review_scraper.config import get_env_variable
-from test.support.mocked_env import mocked_env_get
+from test.support.configure_test import app
+from amz_review_scraper.config import get_env_db_url
 
 
-@mock.patch("os.environ.get")
-def test_get_env_variable(self):
-    self.side_effect = mocked_env_get
-    POSTGRES_URL = get_env_variable("POSTGRES_URL")
-    POSTGRES_USER = get_env_variable("POSTGRES_USER")
-    POSTGRES_PW = get_env_variable("POSTGRES_PW")
-    POSTGRES_DB = get_env_variable("POSTGRES_DB")
-    INVALID_ENV_VAR = get_env_variable("INVLAID")
+def test_development_config(app):
+    app.config.from_object("amz_review_scraper.config.DevelopmentConfig")
 
-    assert POSTGRES_URL.name == "fake_postgres_url"
-    assert POSTGRES_USER.name == "fake_postgres_user"
-    assert POSTGRES_PW.name == "fake_postgres_pw"
-    assert POSTGRES_DB.name == "fake_postgres_db"
-    assert INVALID_ENV_VAR == None
+    DB_URL = get_env_db_url("development")
+
+    assert app.config["DEBUG"]
+    assert not app.config["TESTING"]
+    assert app.config["SQLALCHEMY_DATABASE_URI"] == DB_URL
+
+
+def test_testing_config(app):
+    app.config.from_object("amz_review_scraper.config.TestingConfig")
+
+    DB_URL = get_env_db_url("testing")
+
+    assert app.config["DEBUG"]
+    assert app.config["TESTING"]
+    assert not app.config["PRESERVE_CONTEXT_ON_EXCEPTION"]
+    assert app.config["SQLALCHEMY_DATABASE_URI"] == DB_URL
+
+
+def test_production_config(app):
+    app.config.from_object("amz_review_scraper.config.ProductionConfig")
+
+    DB_URL = get_env_db_url("production")
+
+    assert not app.config["DEBUG"]
+    assert not app.config["TESTING"]
+    assert app.config["SQLALCHEMY_DATABASE_URI"] == DB_URL
