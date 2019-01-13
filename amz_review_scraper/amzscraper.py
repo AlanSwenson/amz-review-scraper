@@ -56,13 +56,12 @@ def scrape(soup, asin):
         scraped_item = item.Item(
             name=product_json["name"], customer_reviews_count=review_count, asin=asin
         )
-        user.items.append(scraped_item)
-        # TODO: think of a better name than item_exists
-        item_exists = scraped_item.check()
-        if item_exists == None:
-            scraped_item.save()
+
+        item_link = item.is_item_linked_to_user(scraped_item, user)
+        if item_link is None:
+            user.items.append(scraped_item)
         else:
-            scraped_item.update_last_scraped()
+            scraped_item = item.save_or_update(scraped_item)
 
     except Exception as e:
         model_functions.db_error("Item", e)
@@ -73,12 +72,12 @@ def scrape(soup, asin):
     for divs in soup.findAll("div", attrs={"data-hook": "review-collapsed"}):
         long_review = divs.text.strip()
         try:
-            scraped_review = review.Review(
-                review=long_review, asin=asin, owner=scraped_item
-            )
-            review_exists = scraped_review.check()
-            if review_exists == None:
-                scraped_review.save()
+            review_exists = review.get_results(asin=asin, review=long_review)
+            if review_exists is None:
+                scraped_review = review.Review(
+                    review=long_review, asin=asin, owner=scraped_item
+                )
+                review.save(scraped_review)
             else:
                 pass
         except Exception as e:
