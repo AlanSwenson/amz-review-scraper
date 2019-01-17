@@ -6,6 +6,8 @@ python:
 # command to install dependencies
 services:
   - postgresql
+addons:
+  - postgresql: "11"
 install:
   - 'pip install pipenv'
   - 'pipenv sync'

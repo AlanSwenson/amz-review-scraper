@@ -21,7 +21,6 @@ import amz_review_scraper.model_functions as model_functions
 def test_development_config(app):
     app = app(DevelopmentConfig)
     DB_URL = get_env_db_url("development")
-    print(DB_URL)
     assert app.config["DEBUG"]
     assert not app.config["TESTING"]
     assert app.config["SQLALCHEMY_DATABASE_URI"] == DB_URL
@@ -30,7 +29,6 @@ def test_development_config(app):
 def test_testing_config(app):
     app = app(TestingConfig)
     DB_URL = get_env_db_url("testing")
-    print(DB_URL)
     assert app.config["DEBUG"]
     assert app.config["TESTING"]
     assert not app.config["PRESERVE_CONTEXT_ON_EXCEPTION"]
@@ -40,7 +38,6 @@ def test_testing_config(app):
 def test_production_config(app):
     app = app(ProductionConfig)
     DB_URL = get_env_db_url("production")
-    print(DB_URL)
     assert not app.config["DEBUG"]
     assert not app.config["TESTING"]
     assert app.config["SQLALCHEMY_DATABASE_URI"] == DB_URL
