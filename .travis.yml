@@ -5,6 +5,10 @@ python:
   - "3.7-dev"  # 3.7 development branch
 addons:
   postgresql: "10"
+  apt:
+    packages:
+    - postgresql-10
+    - postgresql-client-10
 services:
   - postgresql
 # command to install dependencies
