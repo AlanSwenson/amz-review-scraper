@@ -15,7 +15,7 @@ import amz_review_scraper.model_functions as model_functions
 
 
 @pytest.mark.skipif(
-    "TRAVIS" in os.environ and os.environ["TRAVIS"] == True,
+    "TRAVIS" in os.environ and os.environ["TRAVIS"] == "True",
     reason="Skipping this test on Travis CI.",
 )
 def test_development_config(app):
