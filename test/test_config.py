@@ -1,4 +1,5 @@
 import pytest
+import os
 
 from test.support.configure_test import app
 from amz_review_scraper.config import (
@@ -13,6 +14,10 @@ from amz_review_scraper.models.user import User
 import amz_review_scraper.model_functions as model_functions
 
 
+@pytest.mark.skipif(
+    "TRAVIS" in os.environ and os.environ["TRAVIS"] == True,
+    reason="Skipping this test on Travis CI.",
+)
 def test_development_config(app):
     app = app(DevelopmentConfig)
     DB_URL = get_env_db_url("development")
