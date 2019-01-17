@@ -1,4 +1,4 @@
-# from flask import current_app
+from sqlalchemy.dialects.postgresql import insert
 
 from amz_review_scraper import db
 
@@ -10,13 +10,19 @@ class Review(db.Model):
     review = db.Column(db.String)
     item_id = db.Column(db.Integer, db.ForeignKey("items.id"))
 
-    def save(self):
-        db.session.add(self)
 
-    def check(self):
-        return (
-            db.session.query(Review)
-            .filter_by(asin=self.asin)
-            .filter_by(review=self.review)
-            .scalar()
-        )
+def save(self):
+    db.session.add(self)
+
+
+def get_results(asin=None, review=None):
+    if asin is not None:
+        if review is not None:
+            return (
+                db.session.query(Review)
+                .filter_by(asin=asin)
+                .filter_by(review=review)
+                .first()
+            )
+        return Review.query.filter_by(asin=asin)
+    return Review.query.all()

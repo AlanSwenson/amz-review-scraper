@@ -1,5 +1,8 @@
-from amz_review_scraper import db
+from sqlalchemy.dialects.postgresql import insert
 from datetime import datetime
+
+from amz_review_scraper import db
+from amz_review_scraper.models.users_items_association import users_items_association
 
 
 class Item(db.Model):
@@ -11,17 +14,43 @@ class Item(db.Model):
     reviews = db.relationship("Review", backref="owner", lazy=True)
     last_scraped = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-    def save(self):
-        db.session.add(self)
 
-    def check(self):
-        return db.session.query(Item).filter_by(asin=self.asin).scalar()
+def get_results(asin=None, user_id=None):
+    if asin is not None:
+        return Item.query.filter_by(asin=asin).first()
+    elif user_id is not None:
+        return Item.query.join(
+            users_items_association, (users_items_association.c.user_id == user_id)
+        ).filter(users_items_association.c.item_id == Item.id)
+    else:
+        return Item.query.all()
 
-    def update_last_scraped(self):
-        db.session.query(Item).filter_by(asin=self.asin).update(
-            {"last_scraped": datetime.utcnow()}
+
+def is_item_linked_to_user(self, user):
+    return (
+        Item.query.join(
+            users_items_association, (users_items_association.c.user_id == user.id)
         )
+        .filter(users_items_association.c.item_id == Item.id)
+        .filter(Item.asin == self.asin)
+        .first()
+    )
 
 
-def get_results():
-    return Item.query.all()
+def save_or_update(self):
+    self.last_scraped = datetime.utcnow()
+    stmt = insert(Item).values(
+        asin=self.asin,
+        name=self.name,
+        customer_reviews_count=self.customer_reviews_count,
+        last_scraped=self.last_scraped,
+    )
+    do_update_stmt = stmt.on_conflict_do_update(
+        index_elements=["asin"],
+        set_={
+            "customer_reviews_count": self.customer_reviews_count,
+            "last_scraped": self.last_scraped,
+        },
+    )
+    db.session.execute(do_update_stmt)
+    return get_results(asin=self.asin)
