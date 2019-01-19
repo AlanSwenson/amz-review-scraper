@@ -5,8 +5,9 @@ from flask_wtf.csrf import CSRFProtect
 from flask_s3 import FlaskS3
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, current_user, logout_user
+import os
 
-from amz_review_scraper.config import DevelopmentConfig
+from amz_review_scraper.config import DevelopmentConfig, ProductionConfig
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -20,6 +21,8 @@ login_manager.login_message_category = "info"
 
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__, static_url_path="/static")
+    if "ZAPPA" in os.environ and os.environ["ZAPPA"] == "True":
+        config_class = ProductionConfig
     app.config.from_object(config_class)
 
     with app.app_context():
