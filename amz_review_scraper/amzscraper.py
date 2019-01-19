@@ -79,7 +79,7 @@ def scrape(soup, asin):
                 )
                 review.save(scraped_review)
             else:
-                pass
+                print("Review already exists")
         except Exception as e:
             model_functions.db_error("Review", e)
             raise
