@@ -8,10 +8,6 @@ from amz_review_scraper.config import (
     DevelopmentConfig,
     ProductionConfig,
 )
-from amz_review_scraper import db
-import amz_review_scraper.models.item as item
-from amz_review_scraper.models.user import User
-import amz_review_scraper.model_functions as model_functions
 
 
 @pytest.mark.skipif(
@@ -41,15 +37,3 @@ def test_production_config(app):
     assert not app.config["DEBUG"]
     assert not app.config["TESTING"]
     assert app.config["SQLALCHEMY_DATABASE_URI"] == DB_URL
-
-
-def test_db_create(app):
-    app = app(TestingConfig)
-
-    scraped_item = item.Item(
-        name="test name", customer_reviews_count="99", asin="1111111111"
-    )
-    scraped_item = item.save_or_update(scraped_item)
-    model_functions.save_to_db()
-
-    assert db.session.query(item.Item).one()
