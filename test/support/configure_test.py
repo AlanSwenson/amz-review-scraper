@@ -2,6 +2,7 @@ import pytest
 
 from amz_review_scraper import create_app, db
 from amz_review_scraper.config import get_env_db_url
+from amz_review_scraper.config import TestingConfig
 
 
 @pytest.yield_fixture
@@ -9,11 +10,9 @@ def app():
     def _app(config_class):
         app = create_app(config_class)
         app.app_context().push()
-        # with app.app_context():
-        DB_URL = get_env_db_url("testing")
 
-        if app.config["SQLALCHEMY_DATABASE_URI"] == DB_URL:
-            # app.config.from_object("amz_review_scraper.config.TestingConfig")
+        if config_class is TestingConfig:
+            db.drop_all()
             from amz_review_scraper.models.users_items_association import (
                 users_items_association,
             )
@@ -22,11 +21,9 @@ def app():
             from amz_review_scraper.models.review import Review
 
             db.create_all()
-            return app
-        else:
-            return app
-            db.session.remove()
+        return app
 
     yield _app
     db.session.remove()
-    db.drop_all()
+    if str(db.engine.url) == TestingConfig.SQLALCHEMY_DATABASE_URI:
+        db.drop_all()
