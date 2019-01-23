@@ -14,6 +14,18 @@ login_blueprint = Blueprint(
 )
 
 
+def log_user_in(form):
+    user = User.query.filter_by(email=form.email.data.lower()).first()
+    if user and bcrypt.check_password_hash(user.password, form.password.data):
+        login_user(user, remember=form.remember.data)
+        next_page = request.args.get("next")
+        return redirect(next_page) if next_page else redirect(url_for("track.index"))
+
+    else:
+        flash("Login Unsuccessful. Please check email and password", "danger")
+        return None
+
+
 @login_blueprint.route("/", methods=["GET", "POST"])
 def index():
     if current_user.is_authenticated:
@@ -21,14 +33,8 @@ def index():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data.lower()).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
-            next_page = request.args.get("next")
-            return (
-                redirect(next_page) if next_page else redirect(url_for("track.index"))
-            )
-        else:
-            flash("Login Unsuccessful. Please check email and password", "danger")
+        result = log_user_in(form)
+        if result is not None:
+            return result
 
     return render_template("login/index.html", title="Login", form=form)
