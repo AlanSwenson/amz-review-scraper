@@ -9,17 +9,25 @@
       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead>
             <tr>
+                <th></th>
                 <th>ASIN</th>
                 <th>Name</th>
                 <th>Reviews</th>
+                <th>Last Scraped</th>
 
             </tr>
         </thead>
         {% for item in res %}
             <tr>
+                <th>
+                    <form action="{{ url_for('results.refresh_asin', asin=item.asin)}}">
+                    <button type="submit" class="btn"><i class="fas fa-fw fa-redo-alt"></i></button>
+                    </form>
+                </th>
                 <th><a href="{{ url_for('ASIN.index', asin=item.asin)}}">{{ item.asin }}</a></th>
                 <th>{{item.name}}</th>
                 <th>{{item.customer_reviews_count}}</th>
+                <th>{{item.last_scraped.strftime('%x %-I:%M %p ')}}</th>
             </tr>
         {% endfor %}
       </table>
