@@ -1,5 +1,3 @@
-
-
 def review_count_cleanup(reviews):
     try:
         reviews = reviews.replace(",", "")

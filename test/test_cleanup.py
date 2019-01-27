@@ -8,7 +8,6 @@ def test_review_count_cleanup():
     review3 = review_count_cleanup("0 customer reviews")
     review4 = review_count_cleanup(0)
 
-
     assert review1 == "32"
     assert review2 == "1322"
     assert review3 == "0"
