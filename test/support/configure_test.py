@@ -12,6 +12,8 @@ def app():
         app.app_context().push()
 
         if config_class is TestingConfig:
+
+            # always starting with an empty DB
             db.drop_all()
             from amz_review_scraper.models.users_items_association import (
                 users_items_association,
@@ -21,6 +23,7 @@ def app():
             from amz_review_scraper.models.review import Review
 
             db.create_all()
+
         return app
 
     yield _app
