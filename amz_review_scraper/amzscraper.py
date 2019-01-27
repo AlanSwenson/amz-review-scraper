@@ -63,8 +63,7 @@ def scrape(soup, asin):
             item_link = item.is_item_linked_to_user(scraped_item, user)
             if item_link is None:
                 user.items.append(existing_item)
-            else:
-                scraped_item = item.save_or_update(scraped_item)
+            scraped_item = item.save_or_update(scraped_item)
 
     except Exception as e:
         model_functions.db_error("Item", e)
