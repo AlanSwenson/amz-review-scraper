@@ -9,7 +9,7 @@ from amz_review_scraper.config import TestingConfig
 def app():
     def _app(config_class):
         app = create_app(config_class)
-        app.app_context().push()
+        app.test_request_context().push()
 
         if config_class is TestingConfig:
 

@@ -17,7 +17,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    items = db.relationship("Item", secondary=users_items_association, backref="owner")
+    items = db.relationship("Item", secondary=users_items_association, backref="user")
 
     def save(self):
         db.session.add(self)

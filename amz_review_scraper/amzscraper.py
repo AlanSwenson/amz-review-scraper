@@ -56,12 +56,15 @@ def scrape(soup, asin):
         scraped_item = item.Item(
             name=product_json["name"], customer_reviews_count=review_count, asin=asin
         )
-
-        item_link = item.is_item_linked_to_user(scraped_item, user)
-        if item_link is None:
+        existing_item = item.get_results(asin=scraped_item.asin)
+        if existing_item is None:
             user.items.append(scraped_item)
         else:
-            scraped_item = item.save_or_update(scraped_item)
+            item_link = item.is_item_linked_to_user(scraped_item, user)
+            if item_link is None:
+                user.items.append(existing_item)
+            else:
+                scraped_item = item.save_or_update(scraped_item)
 
     except Exception as e:
         model_functions.db_error("Item", e)

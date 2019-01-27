@@ -15,11 +15,12 @@ class Item(db.Model):
     last_scraped = db.Column(
         db.DateTime(timezone=True), nullable=False, default=datetime.now(timezone.utc)
     )
+    users = db.relationship("User", secondary=users_items_association, backref="item")
 
 
 def get_results(asin=None, user_id=None):
     if asin is not None:
-        return Item.query.filter_by(asin=asin).first()
+        return Item.query.filter_by(asin=asin).one_or_none()
     elif user_id is not None:
         return Item.query.join(
             users_items_association, (users_items_association.c.user_id == user_id)
