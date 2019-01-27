@@ -16,7 +16,8 @@ before_script:
 # to start the test
 script:
   - pytest --cov=amz_review_scraper
-  - black --check --verbose .
+  allow_failures:
+    - black --check --verbose .
 branches:
   only:
   - gh-pages
