@@ -1,5 +1,5 @@
 from sqlalchemy.dialects.postgresql import insert
-from datetime import datetime
+from datetime import datetime, timezone
 
 from amz_review_scraper import db
 from amz_review_scraper.models.users_items_association import users_items_association
@@ -12,7 +12,9 @@ class Item(db.Model):
     name = db.Column(db.String)
     customer_reviews_count = db.Column(db.Integer)
     reviews = db.relationship("Review", backref="owner", lazy=True)
-    last_scraped = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    last_scraped = db.Column(
+        db.DateTime(timezone=True), nullable=False, default=datetime.now(timezone.utc)
+    )
 
 
 def get_results(asin=None, user_id=None):
@@ -38,7 +40,7 @@ def is_item_linked_to_user(self, user):
 
 
 def save_or_update(self):
-    self.last_scraped = datetime.utcnow()
+    self.last_scraped = datetime.now(timezone.utc)
     stmt = insert(Item).values(
         asin=self.asin,
         name=self.name,

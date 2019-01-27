@@ -27,7 +27,7 @@
                 <th><a href="{{ url_for('ASIN.index', asin=item.asin)}}">{{ item.asin }}</a></th>
                 <th>{{item.name}}</th>
                 <th>{{item.customer_reviews_count}}</th>
-                <th>{{item.last_scraped.strftime('%x %-I:%M %p ')}}</th>
+                <th>{{item.last_scraped.astimezone().strftime('%x %-I:%M %p ')}}</th>
             </tr>
         {% endfor %}
       </table>
