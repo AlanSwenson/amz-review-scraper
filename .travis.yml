@@ -2,17 +2,8 @@ language: python
 python:
   - "3.6"
   - "3.6-dev"  # 3.6 development branch
-  - "3.7-dev"  # 3.7 development branch
-  - nightly
-matrix:
-  include:
-    python:
-      - "3.6"
-      - "3.6-dev"  # 3.6 development branch
-  allow_failures:
-    python:
-      - "3.7-dev"  # 3.7 development branch
-      - nightly
+  #- "3.7-dev"  # 3.7 development branch
+
 addons:
   postgresql: "9.5"
 services:
