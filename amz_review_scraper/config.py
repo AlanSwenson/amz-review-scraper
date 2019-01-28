@@ -14,7 +14,7 @@ def create_db_url(user, pw, url, db):
 
 
 # import .env variables for DB connection
-# TODO: this can probably be simplified more
+# TODO: Unify these ENV variables by pulling from different dot files
 def get_env_db_url(env_setting):
     if env_setting == "development":
         POSTGRES_USER = get_env_variable("DEV_POSTGRES_USER")
