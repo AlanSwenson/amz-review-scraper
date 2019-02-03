@@ -1,8 +1,9 @@
+import os
+
 from flask import Flask, redirect, url_for, render_template, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-
-# from flask_wtf.csrf import CSRFProtect
+from flask_moment import Moment
 from flask_s3 import FlaskS3
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import (
@@ -14,15 +15,16 @@ from flask_jwt_extended import (
     create_access_token,
     set_access_cookies,
 )
-import os
 
 from amz_review_scraper.config import DevelopmentConfig, ProductionConfig
+
 
 db = SQLAlchemy()
 migrate = Migrate()
 s3 = FlaskS3()
 bcrypt = Bcrypt()
 jwt = JWTManager()
+moment = Moment()
 
 
 def create_app(config_class=DevelopmentConfig):
@@ -71,10 +73,7 @@ def create_app(config_class=DevelopmentConfig):
 
     @jwt.expired_token_loader
     def expired_token_loader():
-        try:
-            return redirect(url_for("refresh"))
-        except:
-            return redirect(url_for("logout"))
+        return redirect(url_for("logout"))
 
     return app
 
@@ -85,6 +84,7 @@ def initialize_extensions(app):
     s3.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
+    moment.init_app(app)
 
 
 def register_blueprints(app):

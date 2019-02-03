@@ -17,12 +17,12 @@ pytest-cov = "*"
 coveralls = "*"
 black = "*"
 "flask-bcrypt" = "*"
-flask-login = "*"
 mock = "*"
 pytest = "*"
 bcrypt = "==3.1.4"
 pyyaml = "==4.2b1"
 flask-jwt-extended = "*"
+flask-moment = "*"
 
 [dev-packages]
 awscli = "*"

@@ -12,7 +12,6 @@ from flask import (
     jsonify,
     current_app,
 )
-from flask_login import login_user, current_user
 from flask_jwt_extended import (
     jwt_required,
     jwt_optional,
@@ -75,9 +74,6 @@ def auth():
 @login_blueprint.route("/", methods=["GET", "POST"])
 @jwt_optional
 def index():
-    if get_jwt_identity() is not None:
-        print("No User")
-        return redirect(url_for("track.index"))
     form = LoginForm()
 
     if form.validate_on_submit():

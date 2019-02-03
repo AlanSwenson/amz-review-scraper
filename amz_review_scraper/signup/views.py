@@ -19,8 +19,6 @@ signup_blueprint = Blueprint(
 @signup_blueprint.route("/", methods=["GET", "POST"])
 @jwt_optional
 def index():
-    if get_jwt_identity() is not None:
-        return redirect(url_for("track.index"))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode(

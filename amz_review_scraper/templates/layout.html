@@ -207,6 +207,12 @@
 
     <script src="{{ url_for('static', filename='js/sb-admin.min.js') }}"/></script>
 
+    <!-- Moment for local time zones-->
+    {% block scripts %}
+        {{ moment.include_moment() }}
+    {% endblock %}
+
+
 
   </body>
 

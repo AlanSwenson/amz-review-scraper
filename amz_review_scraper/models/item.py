@@ -13,7 +13,7 @@ class Item(db.Model):
     customer_reviews_count = db.Column(db.Integer)
     reviews = db.relationship("Review", backref="owner", lazy=True)
     last_scraped = db.Column(
-        db.DateTime(timezone=True), nullable=False, default=datetime.now(timezone.utc)
+        db.DateTime(timezone=True), nullable=False, default=datetime.utcnow()
     )
     users = db.relationship("User", secondary=users_items_association, backref="item")
 
@@ -41,7 +41,7 @@ def is_item_linked_to_user(self, user):
 
 
 def save_or_update(self):
-    self.last_scraped = datetime.now(timezone.utc)
+    self.last_scraped = datetime.utcnow()
     stmt = insert(Item).values(
         asin=self.asin,
         name=self.name,

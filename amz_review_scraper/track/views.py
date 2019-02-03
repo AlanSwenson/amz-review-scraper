@@ -1,5 +1,4 @@
 from flask import redirect, render_template, url_for, Blueprint, flash
-from flask_login import login_required
 
 from flask_jwt_extended import jwt_required, get_jwt_identity
 

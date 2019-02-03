@@ -1,11 +1,11 @@
 from flask import redirect, render_template, url_for, Blueprint, flash
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 import amz_review_scraper.models.item as item
 import amz_review_scraper.urls as urls
 import amz_review_scraper.get_soup as get_soup
 import amz_review_scraper.amzscraper as amazon
 
-from flask_jwt_extended import get_jwt_identity, jwt_required
 
 results_blueprint = Blueprint(
     "results",
