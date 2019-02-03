@@ -1,14 +1,10 @@
 from datetime import datetime
 from flask_login import UserMixin
 from sqlalchemy.orm import relationship
+from flask_jwt_extended import get_jwt_identity
 
-from amz_review_scraper import db, login_manager
+from amz_review_scraper import db
 from amz_review_scraper.models.users_items_association import users_items_association
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 
 class User(db.Model, UserMixin):
@@ -21,3 +17,7 @@ class User(db.Model, UserMixin):
 
     def save(self):
         db.session.add(self)
+
+
+def get_current_user():
+    return User.query.filter_by(id=get_jwt_identity()).one_or_none()

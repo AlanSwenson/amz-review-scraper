@@ -21,6 +21,7 @@ def app():
             from amz_review_scraper.models.user import User
             from amz_review_scraper.models.item import Item
             from amz_review_scraper.models.review import Review
+            from amz_review_scraper.models.token_blacklist import TokenBlacklist
 
             db.create_all()
 

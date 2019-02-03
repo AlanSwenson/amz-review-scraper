@@ -82,6 +82,13 @@ class Config(object):
     # FLASKS3_DEBUG = True
     DEBUG = False
     TESTING = False
+    # JWT Settings
+    JWT_SECRET_KEY = FLASK_SECRET_KEY
+    JWT_TOKEN_LOCATION = ["cookies"]
+    JWT_COOKIE_CSRF_PROTECT = False
+    WTF_CSRF_ENABLED = False
+
+    LOGIN_BASE_URL = "http://127.0.0.1:5000"
 
 
 class DevelopmentConfig(Config):
@@ -96,5 +103,6 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = PROD_DB_URL
+    LOGIN_BASE_URL = "https://peachtools.com"
     DEBUG = False
     TESTING = False
