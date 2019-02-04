@@ -1,13 +1,13 @@
 import pytest
 
 from amz_review_scraper import create_app, db
-from amz_review_scraper.config import get_env_db_url
 from amz_review_scraper.config import TestingConfig
 
 
 @pytest.yield_fixture
 def app():
     def _app(config_class):
+
         app = create_app(config_class)
         app.test_request_context().push()
 
@@ -24,6 +24,7 @@ def app():
             from amz_review_scraper.models.token_blacklist import TokenBlacklist
 
             db.create_all()
+            # mocker.patch("flask_jwt_extended.get_jwt_identity", return_value=1)
 
         return app
 
