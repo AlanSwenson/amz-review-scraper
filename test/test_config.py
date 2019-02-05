@@ -3,53 +3,44 @@ import os
 
 from test.support.configure_test import app
 from amz_review_scraper.config import (
-    get_env_db_url,
     TestingConfig,
     DevelopmentConfig,
     ProductionConfig,
+    env,
 )
-from amz_review_scraper import db
-import amz_review_scraper.models.item as item
-from amz_review_scraper.models.user import User
-import amz_review_scraper.model_functions as model_functions
 
 
 @pytest.mark.skipif(
-    "TRAVIS" in os.environ and os.environ["TRAVIS"] == "True",
+    env.bool("TRAVIS", default=False) == True,
+    # "TRAVIS" in os.environ and os.environ["TRAVIS"] == "True",
     reason="Skipping this test on Travis CI.",
 )
 def test_development_config(app):
     app = app(DevelopmentConfig)
-    DB_URL = get_env_db_url("development")
     assert app.config["DEBUG"]
     assert not app.config["TESTING"]
-    assert app.config["SQLALCHEMY_DATABASE_URI"] == DB_URL
+    assert app.config["SQLALCHEMY_DATABASE_URI"] == env.str(
+        "DEV_SQLALCHEMY_DATABASE_URI"
+    )
+    assert app.config["LOGIN_BASE_URL"] == env.str("DEV_LOGIN_BASE_URL")
 
 
 def test_testing_config(app):
     app = app(TestingConfig)
-    DB_URL = get_env_db_url("testing")
     assert app.config["DEBUG"]
     assert app.config["TESTING"]
     assert not app.config["PRESERVE_CONTEXT_ON_EXCEPTION"]
-    assert app.config["SQLALCHEMY_DATABASE_URI"] == DB_URL
+    assert app.config["SQLALCHEMY_DATABASE_URI"] == env.str(
+        "TESTING_SQLALCHEMY_DATABASE_URI"
+    )
+    assert app.config["LOGIN_BASE_URL"] == env.str("TESTING_LOGIN_BASE_URL")
 
 
 def test_production_config(app):
     app = app(ProductionConfig)
-    DB_URL = get_env_db_url("production")
     assert not app.config["DEBUG"]
     assert not app.config["TESTING"]
-    assert app.config["SQLALCHEMY_DATABASE_URI"] == DB_URL
-
-
-def test_db_create(app):
-    app = app(TestingConfig)
-
-    scraped_item = item.Item(
-        name="test name", customer_reviews_count="99", asin="1111111111"
+    assert app.config["SQLALCHEMY_DATABASE_URI"] == env.str(
+        "PROD_SQLALCHEMY_DATABASE_URI"
     )
-    scraped_item = item.save_or_update(scraped_item)
-    model_functions.save_to_db()
-
-    assert db.session.query(item.Item).one()
+    assert app.config["LOGIN_BASE_URL"] == env.str("PROD_LOGIN_BASE_URL")

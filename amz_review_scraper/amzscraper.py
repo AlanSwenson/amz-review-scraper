@@ -1,11 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import json
-from flask_login import current_user
+from flask import redirect, url_for
 
 import amz_review_scraper.model_functions as model_functions
 import amz_review_scraper.models.item as item
 import amz_review_scraper.models.review as review
+import amz_review_scraper.models.user as user_methods
 from amz_review_scraper.soup_searcher import find_attribute
 import amz_review_scraper.cleanup as cleanup
 from amz_review_scraper.config import html_output_file_switch, json_output_file_switch
@@ -52,15 +53,18 @@ def scrape(soup, asin):
     )
 
     try:
-        user = current_user
+        # TODO It is possible to use the JWT library to get the user
+        user = user_methods.get_current_user()
         scraped_item = item.Item(
             name=product_json["name"], customer_reviews_count=review_count, asin=asin
         )
-
-        item_link = item.is_item_linked_to_user(scraped_item, user)
-        if item_link is None:
+        existing_item = item.get_results(asin=scraped_item.asin)
+        if existing_item is None:
             user.items.append(scraped_item)
         else:
+            item_link = item.is_item_linked_to_user(scraped_item, user)
+            if item_link is None:
+                user.items.append(existing_item)
             scraped_item = item.save_or_update(scraped_item)
 
     except Exception as e:
@@ -79,7 +83,7 @@ def scrape(soup, asin):
                 )
                 review.save(scraped_review)
             else:
-                pass
+                print("Review already exists")
         except Exception as e:
             model_functions.db_error("Review", e)
             raise

@@ -2,7 +2,8 @@ language: python
 python:
   - "3.6"
   - "3.6-dev"  # 3.6 development branch
-  - "3.7-dev"  # 3.7 development branch
+  #- "3.7-dev"  # 3.7 development branch
+
 addons:
   postgresql: "9.5"
 services:
@@ -16,7 +17,7 @@ before_script:
 # to start the test
 script:
   - pytest --cov=amz_review_scraper
-  - black --check --verbose
+  - black --check --verbose .
 branches:
   only:
   - gh-pages

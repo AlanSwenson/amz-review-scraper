@@ -1,5 +1,6 @@
 from flask import redirect, render_template, url_for, Blueprint, flash
-from flask_login import login_required
+
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from amz_review_scraper.track.forms import Asin_search_form
 import amz_review_scraper.urls as urls
@@ -17,10 +18,10 @@ track_blueprint = Blueprint(
 
 
 @track_blueprint.route("/", methods=["POST", "GET"])
-@login_required
+@jwt_required
 def index():
     form = Asin_search_form()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and get_jwt_identity() is not None:
         asin = form.asin.data
         url = urls.create_url(asin)
         soup = get_soup.boil_soup(url, asin)
@@ -32,6 +33,5 @@ def index():
             )
         else:
             amazon.scrape(soup, asin)
-
             return redirect(url_for("results.index"))
     return render_template("track/index.html", title="Track", form=form)

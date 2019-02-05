@@ -25,6 +25,9 @@
     <!-- Custom styles for this template-->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/sb-admin.css') }}"/>
 
+    <!-- favicon-->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
+
 
   </head>
 
@@ -206,6 +209,12 @@
     <!-- Custom scripts for all pages-->
 
     <script src="{{ url_for('static', filename='js/sb-admin.min.js') }}"/></script>
+
+    <!-- Moment for local time zones-->
+    {% block scripts %}
+        {{ moment.include_moment() }}
+    {% endblock %}
+
 
 
   </body>

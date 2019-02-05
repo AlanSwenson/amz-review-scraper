@@ -1,5 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
-from flask_login import login_user, current_user, logout_user, login_required
+
+from flask_jwt_extended import get_jwt_identity, jwt_optional
 
 from amz_review_scraper import db, bcrypt
 from amz_review_scraper.models.user import User
@@ -16,9 +17,8 @@ signup_blueprint = Blueprint(
 
 
 @signup_blueprint.route("/", methods=["GET", "POST"])
+@jwt_optional
 def index():
-    if current_user.is_authenticated:
-        return redirect(url_for("track.index"))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode(
