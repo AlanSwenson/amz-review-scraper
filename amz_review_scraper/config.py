@@ -12,9 +12,6 @@ def create_config_obj(env_setting):
         new_config.SQLALCHEMY_DATABASE_URI = env.str("SQLALCHEMY_DATABASE_URI")
         new_config.DEBUG = env.bool("DEBUG", default=False)
         new_config.TESTING = env.bool("TESTING", default=False)
-        new_config.LOGIN_BASE_URL = env.str(
-            "LOGIN_BASE_URL", default="http://127.0.0.1:5000"
-        )
     return new_config
 
 
