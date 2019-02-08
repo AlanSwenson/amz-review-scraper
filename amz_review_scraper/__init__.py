@@ -6,6 +6,7 @@ from flask_migrate import Migrate
 from flask_moment import Moment
 from flask_s3 import FlaskS3
 from flask_bcrypt import Bcrypt
+from flask_mail import Mail
 from flask_jwt_extended import (
     JWTManager,
     jwt_optional,
@@ -25,6 +26,7 @@ s3 = FlaskS3()
 bcrypt = Bcrypt()
 jwt = JWTManager()
 moment = Moment()
+mail = Mail()
 
 
 def create_app(config_class=DevelopmentConfig):
@@ -85,6 +87,7 @@ def initialize_extensions(app):
     bcrypt.init_app(app)
     jwt.init_app(app)
     moment.init_app(app)
+    mail.init_app(app)
 
 
 def register_blueprints(app):

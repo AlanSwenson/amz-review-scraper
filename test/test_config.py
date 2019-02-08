@@ -22,7 +22,10 @@ def test_development_config(app):
     assert app.config["SQLALCHEMY_DATABASE_URI"] == env.str(
         "DEV_SQLALCHEMY_DATABASE_URI"
     )
-    # assert app.config["LOGIN_BASE_URL"] == env.str("DEV_LOGIN_BASE_URL")
+    assert app.config["MAIL_SERVER"] == env.str("MAIL_SERVER")
+    assert app.config["MAIL_DEFAULT_SENDER"] == env.str("MAIL_DEFAULT_SENDER")
+    assert app.config["MAIL_PASSWORD"] == env.str("MAIL_PASSWORD")
+    assert app.config["MAIL_USERNAME"] == env.str("MAIL_USERNAME")
 
 
 def test_testing_config(app):
@@ -33,7 +36,6 @@ def test_testing_config(app):
     assert app.config["SQLALCHEMY_DATABASE_URI"] == env.str(
         "TESTING_SQLALCHEMY_DATABASE_URI"
     )
-    # assert app.config["LOGIN_BASE_URL"] == env.str("TESTING_LOGIN_BASE_URL")
 
 
 def test_production_config(app):
@@ -43,4 +45,3 @@ def test_production_config(app):
     assert app.config["SQLALCHEMY_DATABASE_URI"] == env.str(
         "PROD_SQLALCHEMY_DATABASE_URI"
     )
-    # assert app.config["LOGIN_BASE_URL"] == env.str("PROD_LOGIN_BASE_URL")

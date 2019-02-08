@@ -43,11 +43,22 @@ class Config(object):
     # Flask Settings
     SECRET_KEY = env.str("FLASK_SECRET_KEY")
     SESSION_COOKIE_HTTPONLY = False
+    SECURITY_PASSWORD_SALT = env.str("SECURITY_PASSWORD_SALT")
     # JWT Settings
     JWT_SECRET_KEY = env.str("FLASK_SECRET_KEY")
     JWT_TOKEN_LOCATION = ["cookies"]
     JWT_COOKIE_CSRF_PROTECT = False
     WTF_CSRF_ENABLED = False
+    # mail settings
+    MAIL_SERVER = env.str("MAIL_SERVER")
+    MAIL_PORT = 465
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    # email authentication
+    MAIL_USERNAME = env.str("MAIL_USERNAME")
+    MAIL_PASSWORD = env.str("MAIL_PASSWORD")
+    # mail accounts
+    MAIL_DEFAULT_SENDER = env.str("MAIL_DEFAULT_SENDER")
 
 
 DevelopmentConfig = create_config_obj("DEV_")
