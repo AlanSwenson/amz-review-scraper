@@ -13,6 +13,7 @@ Review Scraper for Amazon
 
 
 <a name="what_do_i_do"/>
+
 ## What do I do?
 
 This project scrapes Amazon listings for recent reviews of specified products (ASIN) and stores them in a Postgres DB
@@ -29,6 +30,7 @@ This project scrapes Amazon listings for recent reviews of specified products (A
 - Get testing coverage closer to 100%
 
 <a name="install"/>
+
 ## Install
 
 This project uses [pipenv](https://github.com/pypa/pipenv) for virtual environments
@@ -45,11 +47,14 @@ pipenv sync
 ```
 
 <a name="setup"/>
+
 ## Setup
 
 #### Create empty PostreSQL databases
 This project uses Postgres as it's database of choice. There are 3 environments set up and for each one you will need to setup a Postgres DB. You will need **development** and **testing** locally and **production** for your deployment.  Use the credentials from each your new databases to complete the .env file below.  My **production** database is setup on RDS but you could choose to do things differently.
+
 <a name="local_usage"/>
+
 # Local Usage
 
 #### Set up a .env file
@@ -131,7 +136,9 @@ After you install new packages use this code to lock the **Pipfile.lock**
 pipenv lock --pre
 ```
 This is because **Black** is a pre-release.  If you decide to remove **Black** as the linter of choice you will not have to do this when installing any new packages.
+
 <a name="deployed_usage"/>
+
 #  Deployed Usage
 
 
@@ -213,9 +220,12 @@ You can also initialize the DB using Zappa directly from the lambda function usi
 zappa invoke <stage name> "create_db.db_init"
 ```
 <a name="more"/>
+
 ### More things you should know
 - Uses **psycopg2-binary** instead of psycopg2 because a future version of psycopg2 will involve a name change.  Using the binary version avoids the warning but may need to be changed at some point when SQLAlchemy updates its dependencies. I wrote this [Medium article](https://medium.com/@aswens0276/fixing-psycopg2-warning-for-flask-sqlalchemy-697e2430783e) with some more info on this.
+
 <a name="contribute"/>
+
 ## How do you contribute to me?
 
 In this project I am learning and practicing a number of skills, if you would like to comment on my code in places I could write better code, it would be much appreciated.
