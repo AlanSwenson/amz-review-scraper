@@ -2,9 +2,17 @@ Review Scraper for Amazon
 ===
 ![Programming language: python](https://img.shields.io/badge/python-3.6-blue.svg) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black) [![Build Status](https://travis-ci.org/AlanSwenson/amz-review-scraper.svg?branch=master)](https://travis-ci.org/AlanSwenson/amz-review-scraper) [![Coverage Status](https://coveralls.io/repos/github/AlanSwenson/amz-review-scraper/badge.svg)](https://coveralls.io/github/AlanSwenson/amz-review-scraper)
 
+##### Table of Contents  
+[What do I do?](#what_do_i_do)  
+[Install](#install)  
+[Setup](#setup)   
+[Local Usage](#local_usage)   
+[Deployed Usage](#deployed_usage)   
+[More things you should know](#more)   
+[How to contribute](#contribute)
 
 
-
+<a name="what_do_i_do"/>
 
 ## What do I do?
 
@@ -21,6 +29,8 @@ This project scrapes Amazon listings for recent reviews of specified products (A
 - Add Web Testing with Selenium
 - Get testing coverage closer to 100%
 
+<a name="install"/>
+
 ## Install
 
 This project uses [pipenv](https://github.com/pypa/pipenv) for virtual environments
@@ -36,11 +46,14 @@ pipenv sync
 
 ```
 
+<a name="setup"/>
 
 ## Setup
 
 #### Create empty PostreSQL databases
 This project uses Postgres as it's database of choice. There are 3 environments set up and for each one you will need to setup a Postgres DB. You will need **development** and **testing** locally and **production** for your deployment.  Use the credentials from each your new databases to complete the .env file below.  My **production** database is setup on RDS but you could choose to do things differently.
+
+<a name="local_usage"/>
 
 # Local Usage
 
@@ -124,6 +137,8 @@ pipenv lock --pre
 ```
 This is because **Black** is a pre-release.  If you decide to remove **Black** as the linter of choice you will not have to do this when installing any new packages.
 
+<a name="deployed_usage"/>
+
 #  Deployed Usage
 
 
@@ -204,8 +219,12 @@ You can also initialize the DB using Zappa directly from the lambda function usi
 ```
 zappa invoke <stage name> "create_db.db_init"
 ```
+<a name="more"/>
+
 ### More things you should know
 - Uses **psycopg2-binary** instead of psycopg2 because a future version of psycopg2 will involve a name change.  Using the binary version avoids the warning but may need to be changed at some point when SQLAlchemy updates its dependencies. I wrote this [Medium article](https://medium.com/@aswens0276/fixing-psycopg2-warning-for-flask-sqlalchemy-697e2430783e) with some more info on this.
+
+<a name="contribute"/>
 
 ## How do you contribute to me?
 

@@ -14,6 +14,9 @@ class User(db.Model):
     password = db.Column(db.String(60), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     items = db.relationship("Item", secondary=users_items_association, backref="user")
+    admin = db.Column(db.Boolean, nullable=True, default=False)
+    confirmed = db.Column(db.Boolean, nullable=True, default=False)
+    confirmed_on = db.Column(db.DateTime, nullable=True)
 
     def save(self):
         db.session.add(self)

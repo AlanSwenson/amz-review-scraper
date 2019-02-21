@@ -6,6 +6,7 @@ from amz_review_scraper.track.forms import Asin_search_form
 import amz_review_scraper.urls as urls
 import amz_review_scraper.get_soup as get_soup
 import amz_review_scraper.amzscraper as amazon
+from amz_review_scraper.decorators import check_confirmed
 
 
 track_blueprint = Blueprint(
@@ -19,6 +20,7 @@ track_blueprint = Blueprint(
 
 @track_blueprint.route("/", methods=["POST", "GET"])
 @jwt_required
+@check_confirmed
 def index():
     form = Asin_search_form()
     if form.validate_on_submit() and get_jwt_identity() is not None:

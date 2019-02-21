@@ -25,6 +25,7 @@ flask-jwt-extended = "*"
 flask-moment = "*"
 pytest-mock = "*"
 environs = "*"
+flask-mail = "*"
 
 [dev-packages]
 awscli = "*"
