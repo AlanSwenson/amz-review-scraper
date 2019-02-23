@@ -20,17 +20,7 @@ def test_reviews(app):
     scraped_item = item.Item(
         name="test name", customer_reviews_count="99", asin="1111111111"
     )
-    # TODO: break this out in amzscraper.py to be a stand alone testable method
-    existing_item = item.get_results(asin=scraped_item.asin)
-    # add an item
-    if existing_item is None:
-        user.items.append(scraped_item)
-    else:
-        item_link = item.is_item_linked_to_user(scraped_item, user)
-        if item_link is None:
-            user.items.append(existing_item)
-        scraped_item = item.save_or_update(scraped_item)
-
+    scraped_item = scraped_item.add(user=user)
     # add Review using save
     scraped_review = review.Review(
         review="testing_long_review", asin=scraped_item.asin, owner=scraped_item

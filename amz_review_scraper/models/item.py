@@ -17,6 +17,18 @@ class Item(db.Model):
     )
     users = db.relationship("User", secondary=users_items_association, backref="item")
 
+    def add(self, user):
+        scraped_item = self
+        existing_item = get_results(asin=self.asin)
+        if existing_item is None:
+            user.items.append(scraped_item)
+        else:
+            item_link = is_item_linked_to_user(scraped_item, user)
+            if item_link is None:
+                user.items.append(existing_item)
+            scraped_item = save_or_update(scraped_item)
+        return scraped_item
+
 
 def get_results(asin=None, user_id=None):
     if asin is not None:
