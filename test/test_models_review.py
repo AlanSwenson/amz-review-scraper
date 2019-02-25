@@ -35,4 +35,6 @@ def test_reviews(app):
         review.get_results(asin="1111111111", review="testing_long_review").review
         == "testing_long_review"
     )
+    assert review.get_results(asin="1111111112").one_or_none() is None
+    assert review.get_results() is not None
     # TODO: add more tests for when it shoud fail

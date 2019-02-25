@@ -16,13 +16,18 @@ def save(self):
 
 
 def get_results(asin=None, review=None):
-    if asin is not None:
-        if review is not None:
-            return (
-                db.session.query(Review)
-                .filter_by(asin=asin)
-                .filter_by(review=review)
-                .first()
-            )
-        return Review.query.filter_by(asin=asin)
-    return Review.query.all()
+    try:
+        if asin is not None:
+            if review is not None:
+                return (
+                    db.session.query(Review)
+                    .filter_by(asin=asin)
+                    .filter_by(review=review)
+                    .first()
+                )
+            return Review.query.filter_by(asin=asin)
+        return Review.query.all()
+    except Exception as e:
+        print(f"An Error Occurred While Retrieving Reviews from DB: {e}")
+        raise
+        return None
