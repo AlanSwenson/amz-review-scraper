@@ -1,6 +1,8 @@
 .env
 .DS_Store
 .coverage
+.vscode
+.pytest_cache
 output_file.html
 product.json
 zappa_settings.json

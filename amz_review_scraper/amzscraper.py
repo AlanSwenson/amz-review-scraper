@@ -52,29 +52,26 @@ def scrape(soup, asin):
         },
     )
 
+    product_json["long-reviews"] = find_attribute(
+        soup, None, "div", attrs={"data-hook": "review-collapsed"}
+    )
+
+    # saving an item to DB
     try:
         # TODO It is possible to use the JWT library to get the user
         user = user_methods.get_current_user()
         scraped_item = item.Item(
             name=product_json["name"], customer_reviews_count=review_count, asin=asin
         )
-        existing_item = item.get_results(asin=scraped_item.asin)
-        if existing_item is None:
-            user.items.append(scraped_item)
-        else:
-            item_link = item.is_item_linked_to_user(scraped_item, user)
-            if item_link is None:
-                user.items.append(existing_item)
-            scraped_item = item.save_or_update(scraped_item)
+
+        scraped_item = scraped_item.add(user=user)
 
     except Exception as e:
         model_functions.db_error("Item", e)
         raise
 
-    # This block of code will help extract the long reviews of the product
-    product_json["long-reviews"] = []
-    for divs in soup.findAll("div", attrs={"data-hook": "review-collapsed"}):
-        long_review = divs.text.strip()
+    # saving reviews for the item to db
+    for long_review in product_json["long-reviews"]:
         try:
             review_exists = review.get_results(asin=asin, review=long_review)
             if review_exists is None:
@@ -87,7 +84,7 @@ def scrape(soup, asin):
         except Exception as e:
             model_functions.db_error("Review", e)
             raise
-        product_json["long-reviews"].append(long_review)
+    # commit everything to DB
     model_functions.save_to_db()
 
     # Saving the scraped html file
