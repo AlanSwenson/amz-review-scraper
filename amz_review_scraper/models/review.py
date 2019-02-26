@@ -17,14 +17,14 @@ def save(self):
 
 def get_results(asin=None, review=None):
     try:
-        if asin is not None:
-            if review is not None:
-                return (
-                    db.session.query(Review)
-                    .filter_by(asin=asin)
-                    .filter_by(review=review)
-                    .first()
-                )
+        if asin and review:
+            return (
+                db.session.query(Review)
+                .filter_by(asin=asin)
+                .filter_by(review=review)
+                .first()
+            )
+        elif asin:
             return Review.query.filter_by(asin=asin)
         return Review.query.all()
     except Exception as e:
