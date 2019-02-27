@@ -7,7 +7,11 @@ from datetime import datetime
 from amz_review_scraper import db, bcrypt
 from amz_review_scraper.email import send_email
 from amz_review_scraper.models.user import User
-from amz_review_scraper.signup.forms import RegistrationForm
+from amz_review_scraper.signup.forms import (
+    RegistrationForm,
+    ResetPasswordForm,
+    RequestResetForm,
+)
 import amz_review_scraper.models.user as user_methods
 
 
@@ -34,6 +38,14 @@ def confirm_token(token, expiration=3600):
     except:
         return False
     return email
+
+
+def send_reset_email(user):
+    token = generate_confirmation_token(user.email)
+    confirm_url = url_for("reset_token", token=token, _external=True)
+    html = render_template("signup/reset_password_email.html", confirm_url=confirm_url)
+    subject = "Reset Password - Peachtools.com"
+    send_email(user.email, subject, html)
 
 
 @signup_blueprint.route("/", methods=["GET", "POST"])
@@ -87,6 +99,21 @@ def unconfirmed():
     return render_template("signup/unconfirmed.html")
 
 
+@signup_blueprint.route("/reset_password", methods=["GET", "POST"])
+def reset_password():
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash(
+            "An email has been sent with instructions to reset your password.", "info"
+        )
+        return redirect(url_for("login.index"))
+    return render_template(
+        "signup/reset_password.html", title="Reset Password", form=form
+    )
+
+
 @signup_blueprint.route("/resend")
 @jwt_required
 def resend_confirmation():
@@ -98,3 +125,24 @@ def resend_confirmation():
     send_email(current_user.email, subject, html)
     flash("A new confirmation email has been sent.", "success")
     return redirect(url_for("signup.unconfirmed"))
+
+
+@app.route("/reset_password/<token>", methods=["GET", "POST"])
+def reset_token(token):
+    try:
+        email = confirm_token(token)
+    except:
+        flash("The password reset link is invalid or has expired.", "danger")
+        return redirect(url_for("signup.reset_request"))
+    user = User.query.filter_by(email=email).first_or_404()
+
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode(
+            "utf-8"
+        )
+        user.password = hashed_password
+        db.session.commit()
+        flash("Your password has been updated! You are now able to log in", "success")
+        return redirect(url_for("login.index"))
+    return render_template("signup/reset_token.html", title="Reset Token", form=form)
