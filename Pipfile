@@ -26,6 +26,7 @@ flask-moment = "*"
 pytest-mock = "*"
 environs = "*"
 flask-mail = "*"
+pylint = "*"
 
 [dev-packages]
 awscli = "*"
