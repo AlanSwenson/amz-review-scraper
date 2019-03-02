@@ -8,7 +8,6 @@ from amz_review_scraper.email_functions import send_email, generate_confirmation
 from amz_review_scraper.models.user import User
 from amz_review_scraper.signup.forms import RegistrationForm
 
-
 signup_blueprint = Blueprint(
     "signup",
     __name__,
@@ -43,4 +42,3 @@ def index():
         flash("A confirmation email has been sent via email.", "success")
         return redirect(url_for("login.index"))
     return render_template("signup/index.html", title="Sign Up", form=form)
-

@@ -1,3 +1,4 @@
+"""Functions for Email and Confirmation Tokens"""
 from itsdangerous import URLSafeTimedSerializer
 from flask_mail import Message
 from flask import current_app as app
@@ -7,17 +8,52 @@ from amz_review_scraper import mail
 
 
 def generate_confirmation_token(email):
+    """
+    Generates an email address confirmation token.
+
+    Parameters
+    ----------
+    email : string
+        email address to be verified
+
+    Returns
+    -------
+    JSON
+        the confirmation token
+
+    """
     serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
     return serializer.dumps(email, salt=app.config["SECURITY_PASSWORD_SALT"])
 
 
 def confirm_token(token, expiration=3600):
+    """
+    Confirms an email address confirmation token.
+
+    Parameters
+    ----------
+    token : JSON
+        email address confirmation token
+
+    expiration : int
+        make sure the token isn't past its expiration
+
+    Returns
+    -------
+    string
+        if the token is valid the email address is returned
+
+    bool
+        if the token is not valid False is returned
+
+    """
     serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
     try:
         email = serializer.loads(
             token, salt=app.config["SECURITY_PASSWORD_SALT"], max_age=expiration
         )
-    except:
+    except Exception as e:
+        print(e)
         return False
     return email
 

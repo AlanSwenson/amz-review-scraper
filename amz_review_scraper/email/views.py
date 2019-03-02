@@ -1,6 +1,5 @@
-from flask import render_template, url_for, redirect, Blueprint
-from flask import current_app as app
-from flask_jwt_extended import get_jwt_identity, jwt_optional, jwt_required
+"""Email Routes"""
+from flask import url_for, redirect, Blueprint
 
 email_blueprint = Blueprint(
     "email",
@@ -13,4 +12,5 @@ email_blueprint = Blueprint(
 
 @email_blueprint.route("/", methods=["POST", "GET"])
 def root():
+    """Route for email/ forwarding to signup/"""
     return redirect(url_for("signup.index"))

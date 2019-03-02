@@ -26,11 +26,14 @@ flask-moment = "*"
 pytest-mock = "*"
 environs = "*"
 flask-mail = "*"
-pylint = "*"
+
 
 [dev-packages]
 awscli = "*"
 zappa = "*"
+pylint = "*"
+pylint-flask = "*"
+pylint-sqlalchemy = "*"
 
 [requires]
 python_version = "3.6"

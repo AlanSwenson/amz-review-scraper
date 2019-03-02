@@ -1,7 +1,7 @@
-import os
-import json
+"""Tests for soup_searcher.py"""
 
-import pytest
+import os
+
 import codecs
 import bs4
 
@@ -16,6 +16,7 @@ product_json = {}
 
 
 def test_find_attribute():
+    """Testing find_attribute function from soup_searcher"""
     product_json["brand"] = find_attribute(
         soup, "data-brand", "div", attrs={"class": "a-box-group"}
     )
@@ -79,7 +80,7 @@ def test_find_attribute():
         "Beats Zeiss 24-70",
         "Five Stars",
     ]
-    assert product_json["tag-that-doesnt-exist"] == None
+    assert product_json["tag-that-doesnt-exist"] is None
 
     assert product_json["long-reviews"] == [
         "I purchased the 24-70/2.8 GM lens first.  Its heavy.  Very Heavy.  There is no balance with the body, and it strains my wrist to hold it.  I purchased the Peak Design Clutch and that made a world of difference on the positive side.  When getting ready for a family site-seeing trip, I found the camera with attached lens would not fit in my 5L camera bag.  the barrel and length of the lens was too big.  I put the camera and lens in a backpack, and off we went.  By the end of the day, my back was sore and my arms tired.  It is that heavy (or rather, it is that unbalanced as it strained my wrist).  I only took a few portait shots of my family, and I noticed that I was usually at F4 or smaller.  To get to 2.8, I had to manually over-ride the program setting.  The photos are amazing, but the camera was so heavy that I dred using it the following day.  I used my iPhone instead.  This is when I learned that there is a reason why Sony offers a 24-70/2.8 GM, and a 24-105/4.  Its all about the trade-off between portability and shallow depth of field.\n                      \n\n                      I purchased the 24-105/4 for the purpose of being a site-seeing lens.  It is much lighter, and much shorter, and a smaller diameter ... it travels a lot easier by using a smaller camera bag.  The weight is much more balanced, and easier on my wrist providing a lot more comfort for all-day shooting.  The extra reach from the telephoto is also nice for site-seeing as many items in museums are beyond reach of a 70mm lens, but I still want that 24mm for family group shots.\n                      \n\n                      With this learning, here is what I am doing.  The 24-70/2.8 is my portrait lens, and it will be used when i am shooting closer subjects in a darker setting of low duration.  The 24-105/4 is my travel and site seeing lens.  Both have a purpose.\n                      \n\n                      But now that I said all of this, consider the following - I also have a 85/1.4 GM that can easily replace the 24-70/2.8 for potraits, and I have the 18-35/2.8 GM lens that can replace the 24-70/2.8 GM for wide angle nature photography.  In some respects, the 24-70/2.8GM lens is no longer needed and can be sold.  If I was starting from scratch, I would not have purchased the 24-70/2.8 GM.\n                      \n\n                      One last comment - I do have the 70-200/4 lens, and love it for its lighter weight and better balance than the 70-200/2.8 GM.  I realize that I loose an f-stop, but I doubt I would use a lens that is too hard on my wrist.\n                      \n\n                      In summary, the GM lenses are the considered the best lenses.  They come at a higher price, higher weight, and longer length that reduce their portability and usability.  Before thinking that only the best lens will do for you, think about ergonomics and the strength of your wrist.  You might find that the best lens is the one that best serves your personal needs.",
