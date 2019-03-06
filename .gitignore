@@ -6,3 +6,4 @@
 output_file.html
 product.json
 zappa_settings.json
+__pycache__

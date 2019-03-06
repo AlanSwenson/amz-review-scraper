@@ -37,10 +37,8 @@ login_blueprint = Blueprint(
 
 def log_user_in(form):
     user = User.query.filter_by(email=form.email.data.lower()).first()
-    if user and bcrypt.check_password_hash(user.password, form.password.data):
-
+    if user.is_correct_password(form.password.data):
         response = set_login_cookies(id=user.id)
-
         return response
         # TODO: reinstate the next_page setup with JWT
         # next_page = request.args.get("next")
@@ -55,7 +53,11 @@ def set_login_cookies(id):
     auth_response = requests.post(
         url=url_for("login.auth", _external=True), json=user_id
     )
-    response = redirect(url_for("track.index"))
+    next_page = request.args.get("next")
+    if next_page:
+        response = redirect(next_page)
+    else:
+        response = redirect(url_for("track.index"))
     login_data_dict = json.loads(auth_response.text)
     response.set_cookie("access_token", value=login_data_dict.get("access_token"))
     response.set_cookie("refresh_token", value=login_data_dict.get("refresh_token"))
@@ -81,12 +83,11 @@ def auth():
 @jwt_optional
 def index():
     form = LoginForm()
-
+    next_page = request.args.get("next")
     if form.validate_on_submit():
+
         response = log_user_in(form)
-        # next_page = request.args.get("next")
-        if response is not None:
+        if response:
             return response
-            # return redirect(next_page) if next_page else response
 
     return render_template("login/index.html", title="Login", form=form)
