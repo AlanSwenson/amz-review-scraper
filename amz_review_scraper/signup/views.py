@@ -22,20 +22,17 @@ signup_blueprint = Blueprint(
 def index():
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode(
-            "utf-8"
-        )
         user = User(
             email=form.email.data.lower(),
-            password=hashed_password,
+            password=form.password.data,
             confirmed=False,
             date_created=datetime.utcnow(),
         )
         db.session.add(user)
         db.session.commit()
         token = generate_confirmation_token(user.email)
-        confirm_url = url_for("signup.confirm_email", token=token, _external=True)
-        html = render_template("signup/activate.html", confirm_url=confirm_url)
+        confirm_url = url_for("user.confirm_email", token=token, _external=True)
+        html = render_template("user/activate.html", confirm_url=confirm_url)
         subject = "Please confirm your email"
         send_email(user.email, subject, html)
 

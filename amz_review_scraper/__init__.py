@@ -34,6 +34,7 @@ def create_app(config_class=DevelopmentConfig):
     if "ZAPPA" in os.environ and os.environ["ZAPPA"] == "True":
         config_class = ProductionConfig
     app.config.from_object(config_class)
+    # adds variable for template to know if a user is present
     app.jinja_env.globals["jwt_user"] = get_jwt_identity
 
     with app.app_context():

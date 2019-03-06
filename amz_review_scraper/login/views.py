@@ -37,10 +37,8 @@ login_blueprint = Blueprint(
 
 def log_user_in(form):
     user = User.query.filter_by(email=form.email.data.lower()).first()
-    if user and bcrypt.check_password_hash(user.password, form.password.data):
-
+    if user.is_correct_password(form.password.data):
         response = set_login_cookies(id=user.id)
-
         return response
         # TODO: reinstate the next_page setup with JWT
         # next_page = request.args.get("next")
