@@ -59,8 +59,6 @@ def set_login_cookies(id):
     else:
         response = redirect(url_for("track.index"))
     login_data_dict = json.loads(auth_response.text)
-    response.set_cookie("access_token", value=login_data_dict.get("access_token"))
-    response.set_cookie("refresh_token", value=login_data_dict.get("refresh_token"))
     set_access_cookies(response, login_data_dict.get("access_token"))
     set_refresh_cookies(response, login_data_dict.get("refresh_token"))
     return response
@@ -85,9 +83,13 @@ def index():
     form = LoginForm()
     next_page = request.args.get("next")
     if form.validate_on_submit():
-
         response = log_user_in(form)
         if response:
             return response
 
     return render_template("login/index.html", title="Login", form=form)
+
+
+@login_blueprint.before_request
+def set_jinja_globals():
+    current_app.jinja_env.globals["jwt_user"] = get_jwt_identity

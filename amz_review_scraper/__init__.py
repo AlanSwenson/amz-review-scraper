@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, redirect, url_for, render_template, Response
+from flask import Flask, redirect, url_for, render_template, Response, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_moment import Moment
@@ -15,6 +15,7 @@ from flask_jwt_extended import (
     jwt_refresh_token_required,
     create_access_token,
     set_access_cookies,
+    current_user,
 )
 
 from amz_review_scraper.config import DevelopmentConfig, ProductionConfig
@@ -34,10 +35,10 @@ def create_app(config_class=DevelopmentConfig):
     if "ZAPPA" in os.environ and os.environ["ZAPPA"] == "True":
         config_class = ProductionConfig
     app.config.from_object(config_class)
-    # adds variable for template to know if a user is present
-    app.jinja_env.globals["jwt_user"] = get_jwt_identity
 
     with app.app_context():
+        # adds variable for template to know if a user is present
+        app.jinja_env.globals["jwt_user"] = get_jwt_identity
         initialize_extensions(app)
         register_blueprints(app)
 
@@ -50,15 +51,14 @@ def create_app(config_class=DevelopmentConfig):
 
     @app.route("/logout")
     def logout():
-        resp = redirect(url_for("login.index"))
+        resp = redirect(url_for("login.index"), code=303)
         unset_jwt_cookies(resp)
-        return resp, 302
+        return resp
 
     @app.route("/refresh", methods=["GET"])
     @jwt_refresh_token_required
     def refresh():
         # Create the new access token
-        current_user = get_jwt_identity()
         access_token = create_access_token(identity=current_user)
         response = redirect(url_for("track.index"))
         response.set_cookie("access_token", value=access_token)
@@ -77,6 +77,7 @@ def create_app(config_class=DevelopmentConfig):
 
     @jwt.expired_token_loader
     def expired_token_loader():
+        print("token expired")
         return redirect(url_for("logout"))
 
     return app

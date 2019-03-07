@@ -26,7 +26,7 @@ flask-moment = "*"
 pytest-mock = "*"
 environs = "*"
 flask-mail = "*"
-pre-commit = "*"
+
 
 [dev-packages]
 awscli = "*"
@@ -34,6 +34,7 @@ zappa = "*"
 pylint = "*"
 pylint-flask = "*"
 pylint-sqlalchemy = "*"
+pre-commit = "*"
 
 [requires]
 python_version = "3.6"

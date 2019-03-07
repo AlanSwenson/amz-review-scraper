@@ -138,7 +138,7 @@
           <span>Results</span></a>
       </li>
       <li class="nav-item">
-        {% if not jwt_user() %}
+        {% if not jwt_user () %}
         <a class="nav-link" href="{{ url_for('login.index')}}">
           <i class="fas fa-fw fa-arrow-alt-circle-right"></i>
           <span>Login</span></a>
