@@ -1,14 +1,13 @@
-from flask import redirect, render_template, url_for, Blueprint, flash
+from flask import redirect, render_template, url_for, Blueprint
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
 import amz_review_scraper.models.item as item
-import amz_review_scraper.urls as urls
-import amz_review_scraper.get_soup as get_soup
-import amz_review_scraper.amzscraper as amazon
+from amz_review_scraper.urls import create_url
+from amz_review_scraper.tasks import track_asin
 from amz_review_scraper import db
 from amz_review_scraper.models.users_items_association import users_items_association
 from amz_review_scraper.models.item import Item
-from amz_review_scraper.models.user import User, get_current_user
+from amz_review_scraper.models.user import get_current_user
 
 
 results_blueprint = Blueprint(
@@ -23,24 +22,17 @@ results_blueprint = Blueprint(
 @results_blueprint.route("/refresh_asin/<asin>", methods=["POST", "GET"])
 @jwt_required
 def refresh_asin(asin):
-    if get_jwt_identity() is not None:
-        url = urls.create_url(asin)
-        soup = get_soup.boil_soup(url, asin)
-        if soup.status_code != None:
-            flash(
-                "ASIN returned Status Code: "
-                + str(soup.status_code)
-                + " Please check your ASIN and try Again"
-            )
-        else:
-            amazon.scrape(soup, asin)
+    if get_jwt_identity():
+        user_id = get_jwt_identity()
+        url = create_url(asin)
+        track_asin(url, asin, user_id)
         return redirect(url_for("results.index"))
 
 
 @results_blueprint.route("/stop_tracking/<asin>", methods=["POST", "GET"])
 @jwt_required
 def stop_tracking(asin):
-    if get_jwt_identity() is not None:
+    if get_jwt_identity():
         link_to_delete = (
             Item.query.join(
                 users_items_association,

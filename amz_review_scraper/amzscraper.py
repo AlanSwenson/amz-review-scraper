@@ -1,18 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+"""Functions for scraping Amazon and storing wanted info in the DB"""
 import json
-from flask import redirect, url_for
 
 import amz_review_scraper.model_functions as model_functions
 import amz_review_scraper.models.item as item
 import amz_review_scraper.models.review as review
-import amz_review_scraper.models.user as user_methods
+from amz_review_scraper.models.user import User
+
 from amz_review_scraper.soup_searcher import find_attribute
 import amz_review_scraper.cleanup as cleanup
 from amz_review_scraper.config import html_output_file_switch, json_output_file_switch
 
 
-def scrape(soup, asin):
+def scrape(soup, asin, user_id):
 
     product_json = {}
     product_json["customer-reviews-count"] = 0
@@ -58,8 +59,7 @@ def scrape(soup, asin):
 
     # saving an item to DB
     try:
-        # TODO It is possible to use the JWT library to get the user
-        user = user_methods.get_current_user()
+        user = User.query.filter_by(id=user_id).one_or_none()
         scraped_item = item.Item(
             name=product_json["name"], customer_reviews_count=review_count, asin=asin
         )
