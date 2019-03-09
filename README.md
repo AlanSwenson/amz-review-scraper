@@ -21,8 +21,7 @@ This project scrapes Amazon listings for recent reviews of specified products (A
 ##### Future Features
 
 - Emails users when their subscribed ASIN has a new review
-- Add way for users to stop tracking an ASIN they were tracking
-- Use Zappa to make the scrape function its own lambda
+- Use Zappa to notify user when their scrape has finished asychronously
 - Scraper should run on its own periodically to check for new reviews for each ASIN
 
 ##### Future non-feature enhancements
@@ -64,17 +63,14 @@ This project uses Postgres as it's database of choice. There are 3 environments 
 #development
 export DEV_SQLALCHEMY_DATABASE_URI= "postgresql://your_development_postgres_url_connection"
 export DEV_DEBUG = True
-export DEV_LOGIN_BASE_URL="http://127.0.0.1:5000"
 
 #testing
 export TESTING_SQLALCHEMY_DATABASE_URI= "postgresql://postgres:@localhost:5432/travis_ci_test"
 export TESTING_DEBUG = True
 export TESTING_TESTING = True
-export TESTING_LOGIN_BASE_URL="http://127.0.0.1:5000"
 
 #production
 export PROD_SQLALCHEMY_DATABASE_URI= "postgresql://your_production_postgres_url_connection"
-export PROD_LOGIN_BASE_URL="https://your_production_url.com"
 
 #proxy variables
 export http="http://proxyservice"
