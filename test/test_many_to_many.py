@@ -1,4 +1,3 @@
-import pytest
 import os
 import codecs
 import bs4
@@ -8,7 +7,8 @@ from test.support.testing_functions import create_test_user
 from amz_review_scraper import db
 import amz_review_scraper.models.user as user
 from amz_review_scraper.config import TestingConfig
-from amz_review_scraper.amzscraper import scrape
+from amz_review_scraper.tasks import track_asin
+from amz_review_scraper.urls import create_url
 import amz_review_scraper.models.item as item
 from amz_review_scraper.models.users_items_association import users_items_association
 
@@ -19,8 +19,7 @@ path = os.path.join(my_path, "materials/sample_output_file.html")
 raw_html = codecs.open(path, "r")
 soup = bs4.BeautifulSoup(raw_html, "lxml")
 
-
-@pytest.mark.skip(reason="need to change login testing for JWT")
+# TODO mock the soup results
 def test_many_to_many(app):
     app = app(TestingConfig)
 
@@ -30,14 +29,16 @@ def test_many_to_many(app):
     test_user1 = (
         db.session.query(user.User).filter_by(email="test_email@email.com").one()
     )
-    login_user(test_user1)
-    scrape(soup=soup, asin="B076V9P58R")
+    user_id = test_user1.id
+    asin = "B076V9P58R"
+    url = create_url(asin)
+    track_asin(url, asin, user_id, config_class=TestingConfig)
 
     test_user2 = (
         db.session.query(user.User).filter_by(email="test2_email@email.com").one()
     )
-    login_user(test_user2)
-    scrape(soup=soup, asin="B076V9P58R")
+    user_id2 = test_user2.id
+    track_asin(url, asin, user_id2, config_class=TestingConfig)
 
     # Test if user 1 persists in DB
     assert db.session.query(user.User).filter_by(email="test_email@email.com").one()
